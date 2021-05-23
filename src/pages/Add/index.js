@@ -13,6 +13,7 @@ import {Button, Header, List, Picker2, PickerList} from '../../components';
 import {getData, storeData, useForm} from '../../utils';
 import {Fire} from '../../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -21,6 +22,7 @@ const Add = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [dbPhoto, setDbPhoto] = useState(null);
   const [form, setForm] = useForm({
     waktu: '',
     merk: '',
@@ -29,7 +31,7 @@ const Add = ({navigation}) => {
     catatan: '',
     alat: '',
     kondisi: '',
-    uid: '',
+    photo: '',
   });
   // const [kirim, setKirim] = useState('')
   // const [user, setUser] = useState({})
@@ -38,6 +40,10 @@ const Add = ({navigation}) => {
   //     setUser(res)
   //   })
   // }, [])
+
+  useEffect(() => {
+    getImageData()
+  }, [dbPhoto])
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -85,6 +91,17 @@ const Add = ({navigation}) => {
   //     showError(err.message);
   //   })
   // }
+  const getImageData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@DBphoto')
+      if(value !== null) {
+        // value previously stored
+        setDbPhoto(value)
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
 
   const onContinue = () => {
     setForm('reset');
@@ -99,6 +116,7 @@ const Add = ({navigation}) => {
       lokasi: form.lokasi,
       catatan: form.catatan,
       alat: form.alat,
+      photo: dbPhoto
     };
 
     Fire.database()
@@ -110,7 +128,8 @@ const Add = ({navigation}) => {
     })
 
     storeData('user', data);
-    navigation.navigate('HasilLaporan', data);
+    // navigation.navigate('HasilLaporan', data);
+    console.log('isi const data ==> ', data)
   };
   
   return (
@@ -118,7 +137,7 @@ const Add = ({navigation}) => {
       <Header title="Pelaporan Alat" />
       <ScrollView>
         <View style={styles.kiki}>
-          <PickerList />
+          <PickerList pickerValue={value => console.log('value dari picker ==> ', value)} />
           <View style={{flexDirection: 'row', marginBottom: 20}}>
             <Text style={{fontSize: 14, width: 60}}>Waktu</Text>
             <Text style={{fontSize: 14, marginRight: 10}}>:</Text>

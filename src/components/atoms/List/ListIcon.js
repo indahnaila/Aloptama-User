@@ -12,6 +12,7 @@ import {AddGallery, AddCamera, BlankPhoto} from '../../../assets';
 import * as ImagePicker from 'react-native-image-picker';
 import {Fire} from '../../../config';
 import { useForm } from '../../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {showMessage} from 'react-native-flash-message'
 
 const width = Dimensions.get('window').width;
@@ -24,10 +25,17 @@ const ListIcon = () => {
   const [form, setForm] = useForm({
     uid: '',
   });
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('@DBphoto', value)
+    } catch (e) {
+      // saving error
+    }
+  }
   
   const getImage = () => {
-    ImagePicker.launchImageLibrary({}, response => {
-      console.log('response: ', response);
+    ImagePicker.launchImageLibrary({includeBase64: true}, response => {
       if (response.didCancel || response.error) {
         // showMessage({
         //   message: 'foto tidak ada',
@@ -36,8 +44,10 @@ const ListIcon = () => {
         //   color: 'white',
         // });
       } else {
-        console.log('response getImage: ', response);
-        setphotoForDB (`data:${response.type};base64, ${response.data}`)
+        console.log('response getImage: ', response.base64);
+        // disini disimpen aja fotonya ke async storage
+        storeData(`data:${response.type};base64, ${response.type}`)
+        // setphotoForDB (`data:${response.type};base64, ${response.data}`)
         const source = {uri: response.uri};
         setPhoto(source);
         setHasPhoto(true);
@@ -60,7 +70,6 @@ const ListIcon = () => {
       }
     
     ImagePicker.launchCamera({}, response => {
-      console.log('response: ', response);
       if (response.didCancel || response.error) {
       } else {
         const source = {uri: response.uri};

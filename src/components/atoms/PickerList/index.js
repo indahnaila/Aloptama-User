@@ -2,12 +2,9 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-class PickerList extends Component {
-  state = {
-    alat: '',
-  };
+const PickerList = ({pickerValue}) => {
+  const [alat, setAlat] = React.useState('')
 
-  render() {
     return (
       <View style={styles.page}>
         <Text style={styles.text}>Alat</Text>
@@ -22,18 +19,19 @@ class PickerList extends Component {
               {label: 'Radar', value: 'Radar'},
               {label: 'Seiscomp3', value: 'Seiscomp3'},
             ]}
-            defaultValue={this.state.alat}
+            value={alat}
             placeholder="(select an item)"
             placeholderStyle={{color: 'gray'}}
             containerStyle={{height: 40}}
             style={{backgroundColor: '#E8E8E8', fontSize: 16}}
             itemStyle={{justifyContent: 'flex-start'}}
+            setValue={setAlat}
             dropDownStyle={{
               backgroundColor: '#E8E8E8',
               fontSize: 14,
               border: 'none',
             }}
-            onChangeItem={item => this.setState({alat: item.value})}
+            onChangeValue={value => pickerValue(value)}
           />
           <View
             style={{borderBottomWidth: 1, marginLeft: 8, marginBottom: 18}}
@@ -41,7 +39,6 @@ class PickerList extends Component {
         </View>
       </View>
     );
-  }
 }
 
 export default PickerList;

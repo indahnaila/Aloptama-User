@@ -14,7 +14,7 @@ const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const HasilLaporan = ({navigation, route}) => {
-  const {waktu, merk, tahun, lokasi, catatan, kondisi, alat, uid} = route.params;
+  const {waktu, merk, tahun, lokasi, catatan, kondisi, alat, photo} = route.params;
   return (
     <View style={styles.page}>
       <Header2 title="Hasil Laporan" onPress={() => navigation.navigate('Notif')} />
@@ -60,7 +60,7 @@ const HasilLaporan = ({navigation, route}) => {
           <View style={styles.content1}>
             <Text style={styles.text3}>Foto</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{uid}</Text>
+            <Text style={styles.hasil}>{photo}</Text>
           </View>
           <View style={styles.wrap}>
             <TouchableOpacity style={styles.button}>
