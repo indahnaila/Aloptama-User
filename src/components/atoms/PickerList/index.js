@@ -30,13 +30,13 @@ class PickerList extends Component {
             itemStyle={{justifyContent: 'flex-start'}}
             dropDownStyle={{
               backgroundColor: '#E8E8E8',
-              fontSize: 16,
+              fontSize: 14,
               border: 'none',
             }}
             onChangeItem={item => this.setState({alat: item.value})}
           />
           <View
-            style={{borderBottomWidth: 1, marginLeft: 8, marginBottom: 20}}
+            style={{borderBottomWidth: 1, marginLeft: 8, marginBottom: 18}}
           />
         </View>
       </View>
@@ -50,10 +50,9 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 9,
   },
   text: {
-    fontSize: 16,
+    fontSize: 14,
     marginRight: 10,
     width: 50,
   },

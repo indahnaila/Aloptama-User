@@ -27,7 +27,7 @@ class Picker2 extends Component {
             itemStyle={{justifyContent: 'flex-start'}}
             dropDownStyle={{
               backgroundColor: '#E8E8E8',
-              fontSize: 16,
+              fontSize: 14,
               border: 'none',
             }}
             onChangeItem={item => this.setState({alat: item.value})}
@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
   },
   text: {
-    fontSize: 16,
+    fontSize: 14,
     width: 60,
   },
   bisa: {

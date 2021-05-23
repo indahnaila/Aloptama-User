@@ -1,11 +1,19 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {LogoBig} from '../../assets';
+import { Fire } from '../../config';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('Login');
+      Fire.auth().onAuthStateChanged(user => {
+        if (user) {
+          console.log('user:', user)
+          navigation.replace('MainApp')
+        } else {
+          navigation.replace('Login')
+        }
+      })
     }, 3000);
   }, [navigation]);
   return (
@@ -23,5 +31,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 100
   },
 });

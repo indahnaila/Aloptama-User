@@ -1,26 +1,38 @@
-import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 
-const TabRiwayat = ({text}) => {
-    return (
-        <TouchableOpacity style={styles.conten}>
-            <Text style={styles.text}>{text}</Text>
-        </TouchableOpacity>
-    )
-}
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
-export default TabRiwayat
+const TabRiwayat = ({text, state}) => {
+  return (
+    <TouchableOpacity style={styles.conten}>
+      <Text style={styles.text}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+export default TabRiwayat;
 
 const styles = StyleSheet.create({
-    conten: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    text: {
-        backgroundColor: '#018A83',
-        color: 'white',
-        paddingVertical: 10,
-        paddingHorizontal: 24,
-        fontSize: 14
-    }
-})
+  conten: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  text: {
+    backgroundColor: '#018A83',
+    color: 'white',
+    height: height / 4 / 5,
+    width: width / 4.02,
+    fontSize: 14,
+    textAlign: 'center',
+    justifyContent: 'center',
+    padding: 6,
+  },
+});

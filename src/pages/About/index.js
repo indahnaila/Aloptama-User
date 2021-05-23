@@ -1,9 +1,29 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Dimensions, Text, View} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
 import {LogoBig, LogoBMKG} from '../../assets';
 import {Button, Header} from '../../components';
+import {Fire} from '../../config';
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const About = ({navigation}) => {
+  const signOut = () => {
+    Fire.auth()
+      .signOut()
+      .then(() => {
+        navigation.replace('Login');
+      })
+      .catch(err => {
+        showMessage({
+          message: err.message,
+          type: 'default',
+          backgroundColor: 'red',
+          color: 'white',
+        });
+      });
+  };
   return (
     <View style={styles.page}>
       <Header title="Tentang Kami" />
@@ -25,13 +45,9 @@ const About = ({navigation}) => {
           <Text style={styles.text4}>Indah Naila R.S</Text>
         </View>
         <View style={styles.button}>
-          <Button
-            title="Keluar"
-            type="secondary"
-            onPress={() => navigation.replace('Login')}
-          />
+          <Button title="Keluar" type="secondary" onPress={signOut} />
         </View>
-        <View style={{marginBottom: 30}} />
+        {/* <View style={{marginBottom: 20}} /> */}
       </ScrollView>
     </View>
   );
@@ -41,25 +57,25 @@ export default About;
 
 const styles = StyleSheet.create({
   text: {
-    width: 340,
+    width: width / 1.2,
     textAlign: 'center',
     marginTop: 30,
-    fontSize: 15,
+    fontSize: 13,
   },
   text2: {
-    width: 340,
+    width: width / 1.2,
     textAlign: 'center',
     marginTop: 10,
-    fontSize: 15,
+    fontSize: 13,
     marginBottom: 40,
   },
   text3: {
     marginTop: 20,
-    fontSize: 12,
+    fontSize: 10,
   },
   text4: {
     marginTop: 7,
-    fontSize: 12,
+    fontSize: 11,
     marginBottom: 30,
   },
   wrap: {
@@ -68,9 +84,11 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 30,
+    marginBottom: 20
   },
   page: {
     backgroundColor: '#E8E8E8',
     flex: 1,
+    justifyContent: 'space-between'
   },
 });

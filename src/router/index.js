@@ -1,6 +1,7 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
 import {
   Splash,
   Login,
@@ -16,18 +17,47 @@ import {
   RiwayatSeisc,
   HasilLaporan,
 } from '../pages';
-import {BottomNavigator} from '../components';
+import HasilNotif from '../components';
+// import {BottomNavigator} from '../components';
+import {
+  IconAbout,
+  IconAboutAktif,
+  IconAdd,
+  IconAddAktif,
+  IconHome,
+  IconHomeAktif,
+  IconNotif,
+  IconNotifAktif,
+} from '../assets';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainApp = () => {
   return (
-    <Tab.Navigator tabBar={props => <BottomNavigator {...props} />} 
-    tabBarOptions={{
-      keyboardHidesTabBar: true
-    }}
-    >
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? <IconHomeAktif /> : <IconHome />;
+          } else if (route.name === 'Add') {
+            iconName = focused ? <IconAddAktif /> : <IconAdd />;
+          } else if (route.name === 'Notif') {
+            iconName = focused ? <IconNotifAktif /> : <IconNotif />;
+          } else if (route.name === 'About') {
+            iconName = focused ? <IconAboutAktif /> : <IconAbout />;
+          }
+          return iconName;
+        },
+      })}
+      tabBarOptions={{
+        tabStyle: {backgroundColor: '#334752', paddingVertical: 5},
+        labelStyle: {fontSize: 9},
+        keyboardHidesTabBar: true,
+        activeTintColor: 'white',
+        inactiveTintColor: 'gray',
+      }}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Add" component={Add} />
       <Tab.Screen name="Notif" component={Notif} />
@@ -38,7 +68,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="MainApp">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
         name="Splash"
         component={Splash}
