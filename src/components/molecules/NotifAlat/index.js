@@ -5,19 +5,18 @@ import {IconSukses} from '../../../assets';
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NotifAlat = ({navigation, onPress}) => {
+const NotifAlat = ({navigation, onPress, title, lokasi, catatan}) => {
   return (
     <TouchableOpacity style={styles.page} onPress={onPress}>
       <View style={styles.content}>
         <Image source={IconSukses}  />
-        <View>
+        <View style={{flex: 1}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.text1}>Laporan berhasil terkirim!</Text>
-            <Text style={{fontSize: 12}}>2 Juni 2021</Text>
+            <Text style={styles.text1}>{title}</Text>
+            <Text style={{fontSize: 12}}>{lokasi}</Text>
           </View>
           <Text style={styles.text}>
-            Pelaporan alat yang anda isi telah terkirim. Klik untuk melihat
-            detail.
+            {catatan}
           </Text>
         </View>
       </View>
@@ -31,11 +30,11 @@ const styles = StyleSheet.create({
   text: {
     marginHorizontal: 10,
     maxWidth: 300,
-    fontSize: 12
+    fontSize: 12,
   },
   content: {
     flexDirection: 'row',
-    marginHorizontal: 8,
+    marginHorizontal: 10,
     paddingVertical: 12,
   },
   text1: {
@@ -48,6 +47,5 @@ const styles = StyleSheet.create({
     height: height/10,
     borderBottomWidth: 1,
     borderColor: '#E8E8E8',
-    flex: 1
   },
 });

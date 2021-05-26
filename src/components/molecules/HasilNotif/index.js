@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {IconDelete, IconEdit} from '../../../assets';
 
 const HasilNotif = ({route, navigation}) => {
-  const { waktu, merk, tahun, lokasi, catatan } = route.params;
+  // const { waktu, merk, tahun, lokasi, catatan } = route.params;
   return (
     <View style={styles.content}>
       <View style={styles.content1}>
@@ -60,15 +60,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     // backgroundColor: '#E8E8E8'
   },
-  // text: {
-  //   fontSize: 14,
-  //   marginRight: 10,
-  // },
-  // text1: {
-  //   width: 50,
-  //   fontSize: 14,
-  //   marginRight: 10,
-  // },
   button: {
     backgroundColor: '#018A83',
     marginRight: 8,

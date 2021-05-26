@@ -9,9 +9,9 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {AddGallery, AddCamera, BlankPhoto} from '../../../assets';
-import * as ImagePicker from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Fire} from '../../../config';
-import { useForm } from '../../../utils';
+import {useForm} from '../../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import {showMessage} from 'react-native-flash-message'
 
@@ -19,57 +19,58 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const ListIcon = () => {
-  const [photoForDB, setphotoForDB] = useState('')
+  const [photoForDB, setphotoForDB] = useState('');
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photo, setPhoto] = useState(BlankPhoto);
-  const [form, setForm] = useForm({
-    uid: '',
-  });
 
-  const storeData = async (value) => {
+  const storeData = async value => {
     try {
-      await AsyncStorage.setItem('@DBphoto', value)
+      await AsyncStorage.setItem('@DBphoto', value);
     } catch (e) {
       // saving error
     }
-  }
-  
+  };
+
   const getImage = () => {
-    ImagePicker.launchImageLibrary({includeBase64: true}, response => {
-      if (response.didCancel || response.error) {
-        // showMessage({
-        //   message: 'foto tidak ada',
-        //   type: 'default',
-        //   backgroundColor: 'yellow',
-        //   color: 'white',
-        // });
-      } else {
-        console.log('response getImage: ', response.base64);
-        // disini disimpen aja fotonya ke async storage
-        storeData(`data:${response.type};base64, ${response.type}`)
-        // setphotoForDB (`data:${response.type};base64, ${response.data}`)
-        const source = {uri: response.uri};
-        setPhoto(source);
-        setHasPhoto(true);
-      }
-    });
+    launchImageLibrary(
+      {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true},
+      response => {
+        if (response.didCancel || response.error) {
+          // showMessage({
+          //   message: 'foto tidak ada',
+          //   type: 'default',
+          //   backgroundColor: 'yellow',
+          //   color: 'white',
+          // });
+        } else {
+          console.log('response getImage: ', response.base64);
+          // disini disimpen aja fotonya ke async storage
+          storeData(`data:${response.type};base64, ${response.base64}`);
+          // setphotoForDB (`data:${response.type};base64, ${response.base64}`)
+          const source = {uri: response.uri};
+          setPhoto(source);
+          setHasPhoto(true);
+        }
+      },
+    );
   };
 
   const getPicture = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
-      )
+      );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('permission diberikan')
+        console.log('permission diberikan');
       } else {
-        console.log('permission tidak diberikan')
-      } 
-    } catch (err) { 
-      console.log(err);
+        console.log('permission tidak diberikan');
       }
-    
-    ImagePicker.launchCamera({}, response => {
+    } catch (err) {
+      console.log(err);
+    }
+
+    launchCamera(
+      {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true}, response => {
       if (response.didCancel || response.error) {
       } else {
         const source = {uri: response.uri};
@@ -79,27 +80,29 @@ const ListIcon = () => {
     });
   };
 
-  const UploadPhoto = () => {
-    
+  const UploadPhoto = ({nambah}) => {
     Fire.database()
       .ref('aws/' + '/')
       .update({photo: photoForDB});
-      storeData('user', data);
-      navigation.navigate('HasilLaporan', data);
+    storeData('user', data);
+    navigation.navigate('HasilLaporan', data);
   };
   return (
     <View>
       <View style={styles.content}>
         <Text style={styles.text}>Foto</Text>
         <Text style={{fontSize: 16, marginRight: 10}}>:</Text>
-        {/* <View style={styles.input}  /> */}
-        <Image source={photo} style={{width: width / 2, height: height / 5}} />
+        <Text style={{color: 'gray'}}>(upload foto jika terjadi kerusakan)</Text>
       </View>
+      <Image source={photo} style={{width: width / 1.44, height: height / 5, marginLeft: 70, marginTop: -9}} />
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginHorizontal: 78,
+          marginLeft: 100,
+          marginRight: 20,
+          marginTop: 10,
+          marginBottom: 20
         }}>
         <TouchableOpacity style={styles.button1} onPress={getPicture}>
           <AddCamera />

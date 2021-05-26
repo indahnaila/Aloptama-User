@@ -1,41 +1,42 @@
-import React from 'react';
-import {StyleSheet, Text, View, Dimensions, TouchableOpacity, Image, ScrollView} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
+import {Fire} from '../../config';
 import {Header, NotifAlat} from '../../components';
-import {IconSukses} from '../../assets'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Notif = ({navigation, onPress}) => {
+
+  const [nilai, setNilai] = React.useState([]);
+  
+    const parseArray = listObject => {
+      const data = [];
+      Object.keys(listObject).map(key => {
+        data.push({
+          id: key,
+          data: listObject[key],
+        });
+      })
+      return data;
+    }
+
+  React.useEffect(() => {
+    Fire.database()
+      .ref('/')
+      .on('value', (snapshot) => {
+        setNilai(parseArray(snapshot.val()));
+      });
+  }, [])
+
   return (
     <View style={styles.page}>
       <Header title="Notifikasi" />
       <ScrollView>
-      {/* <TouchableOpacity style={styles.page1} onPress={() => navigation.navigate('HasilLaporan')}>
-      <View style={styles.content}>
-        <Image source={IconSukses} />
-        <View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.text1}>Laporan berhasil terkirim!</Text>
-            <Text style={{fontSize: 12}}>2 Juni 2021</Text>
-          </View>
-          <Text style={styles.text}>
-            Pelaporan alat yang anda isi telah terkirim. Klik untuk melihat
-            detail.
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity> */}
-        <NotifAlat onPress={() => navigation.navigate('HasilLaporan')}/>
-        <NotifAlat />
-        {/* <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
-        <NotifAlat />
+      {nilai.map(item => {
+          return <NotifAlat key={item.id} title={item.id} lokasi={item.data.lokasi} catatan={item.data.catatan} onPress={() => navigation.navigate('HasilLaporan', {id: item.id})} />
+          })}
+        {/* <NotifAlat onPress={() => navigation.navigate('HasilLaporan')}/>
         <NotifAlat /> */}
       </ScrollView>
     </View>

@@ -7,11 +7,11 @@ const List = ({title, placeholder, type, value, onChangeText, onPress}) => {
     return <ListIcon />;
   }
   return (
-    <View style={styles.content(type)}>
+    <View style={styles.content}>
       <Text style={styles.text}>{title}</Text>
       <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
       <TextInput
-        style={styles.input}
+        style={styles.input(type)}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
         value={value}
@@ -25,15 +25,15 @@ const List = ({title, placeholder, type, value, onChangeText, onPress}) => {
 export default List;
 
 const styles = StyleSheet.create({
-  content: type => ({
+  content: {
     flexDirection: 'row',
-    marginBottom: type === 'secondary' ? 1 : 20,
-  }),
+    marginBottom: 20,
+  },
   text: {
     fontSize: 14,
     width: 60,
   },
-  input: {
+  input: type => ({
     borderBottomWidth: 1,
     flex: 1,
     display: 'flex',
@@ -41,5 +41,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     fontSize: 14,
     borderColor: 'gray',
-  },
+    textTransform: type === 'secondary' ? 'capitalize' : 'none' ,
+  }),
 });

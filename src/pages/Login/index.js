@@ -14,6 +14,15 @@ const Login = ({navigation}) => {
 
   const onContinue = () => {
     console.log(form);
+    // Fire.auth().onAuthStateChanged(function(user) {
+    //   if (user) {
+    //     user.getIdToken().then(function(idToken) {  // <------ Check this line
+    //         alert(idToken); // It shows the Firebase token now
+    //         return idToken;
+    //     });
+    //   }
+    // });
+
     // (ini fungsi login mulai)
     Fire.auth()
       .signInWithEmailAndPassword(form.username, form.password)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,17 +16,42 @@ import {
   IconRadar,
   IconSeiscomp3,
 } from '../../assets';
-import {ButtonAlat, Header} from '../../components';
+import {ButtonAlat, Header, NotifAlat} from '../../components';
+import {Fire} from '../../config';
 
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
+
 const Home = ({navigation}) => {
+  // const [nilai, setNilai] = React.useState([]);
+  
+  //   const parseArray = listObject => {
+  //     const data = [];
+  //     Object.keys(listObject).map(key => {
+  //       data.push({
+  //         id: key,
+  //         data: listObject[key],
+  //       });
+  //     })
+  //     return data;
+  //   }
+  
+    // React.useEffect(() => {
+    //   Fire.database()
+    //     .ref('/')
+    //     .on('value', (snapshot) => {
+    //       setNilai(parseArray(snapshot.val()));
+    //     });
+    // }, [])
   return (
     <View style={styles.page}>
-      <Header title='Stamet Soekarno Hatta' />
+      <Header title='Stamet Budiarto' />
       <ScrollView>
+      {/* {nilai.map(item => {
+          return <NotifAlat key={item.id} title={item.id} lokasi={item.data.lokasi} catatan={item.data.catatan} onPress={() => navigation.navigate('HasilLaporan', {id: item.id})} />
+          })} */}
         <Image source={GambarSuhu} style={styles.foto} />
         <View style={styles.lolo}>
           <View style={styles.tombol}>

@@ -1,7 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
 import {
   Splash,
   Login,
@@ -17,7 +16,6 @@ import {
   RiwayatSeisc,
   HasilLaporan,
 } from '../pages';
-import HasilNotif from '../components';
 // import {BottomNavigator} from '../components';
 import {
   IconAbout,
@@ -68,7 +66,7 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="About">
       <Stack.Screen
         name="Splash"
         component={Splash}

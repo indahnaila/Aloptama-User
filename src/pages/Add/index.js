@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {Button, Header, List, Picker2, PickerList} from '../../components';
+import {Button, Header, List, PickerList} from '../../components';
 import {getData, storeData, useForm} from '../../utils';
 import {Fire} from '../../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -33,13 +33,6 @@ const Add = ({navigation}) => {
     kondisi: '',
     photo: '',
   });
-  // const [kirim, setKirim] = useState('')
-  // const [user, setUser] = useState({})
-  // useEffect(() => {
-  //   getData('user').then(res => {
-  //     setUser(res)
-  //   })
-  // }, [])
 
   useEffect(() => {
     getImageData()
@@ -58,39 +51,8 @@ const Add = ({navigation}) => {
 
   const showDatepicker = () => {
     showMode('date');
-
   };
 
-  // const sendReport = () => {
-  //   const today = new Date();
-  //   const hour = today.getHours();
-  //   const minutes = today.getMinutes();
-  //   const year = today.getFullYear();
-  //   const month = today.getMonth() +1;
-  //   const date = today.getDate();
-  //   const data = {
-  //     sendBy: user.uid,
-  //     date: new Date().getTime(),
-  //     time: `${hour}:${minutes} ${hour > 12 ? 'PM' : 'AM'}`,
-  //     alat: kirim.alat,
-  //     merk: kirim.merk,
-  //     tahun: kirim.tahun,
-  //     lokasi: kirim.lokasi,
-  //     kondisi: kirim.kondisi,
-  //     catatan: kirim.catatan,
-  //     foto: kirim.foto,
-  //   }
-  //   setKirim('')
-  //   Fire.database()
-  //   .ref(`laporan/${user.uid}/${year}-${month}-${date}`)
-  //   .push(data)
-  //   .then(() => {
-  //     setKirim('');
-  //   })
-  //   .catch(err => {
-  //     showError(err.message);
-  //   })
-  // }
   const getImageData = async () => {
     try {
       const value = await AsyncStorage.getItem('@DBphoto')
@@ -120,16 +82,15 @@ const Add = ({navigation}) => {
     };
 
     Fire.database()
-      .ref('aws/' + '/')
-      .set(data);
+      .ref(form.alat + '/')
+      .push(data);
       
     getData('user').then(res => {
       console.log('data', res)
     })
 
     storeData('user', data);
-    // navigation.navigate('HasilLaporan', data);
-    console.log('isi const data ==> ', data)
+    navigation.navigate('Notif');
   };
   
   return (
@@ -137,8 +98,15 @@ const Add = ({navigation}) => {
       <Header title="Pelaporan Alat" />
       <ScrollView>
         <View style={styles.kiki}>
-          <PickerList pickerValue={value => console.log('value dari picker ==> ', value)} />
-          <View style={{flexDirection: 'row', marginBottom: 20}}>
+          {/* <PickerList pickerValue={value => console.log('value dari picker ==> ', value)} /> */}
+          <List
+            title="Alat"
+            type='secondary'
+            placeholder="(type here)"
+            value={form.alat}
+            onChangeText={value => setForm('alat', value)}
+          />
+          {/* <View style={{flexDirection: 'row', marginBottom: 20}}>
             <Text style={{fontSize: 14, width: 60}}>Waktu</Text>
             <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
             <TouchableOpacity style={{flex: 1}} onPress={showDatepicker}>
@@ -155,7 +123,7 @@ const Add = ({navigation}) => {
               display="default"
               onChange={onChange}
             />
-          )}
+          )} */}
           <List
             title="Lokasi"
             placeholder="(type here)"
@@ -171,11 +139,17 @@ const Add = ({navigation}) => {
           <List
             title="Tahun"
             placeholder="(type here)"
-            type="secondary"
             value={form.tahun}
             onChangeText={value => setForm('tahun', value)}
           />
-          <Picker2 />
+          <List
+            title="Kondisi"
+            type='secondary'
+            placeholder="(ON/OFF)"
+            value={form.kondisi}
+            onChangeText={value => setForm('kondisi', value)}
+            
+          />
           <View style={styles.catatan}>
             <Text style={{fontSize: 14, width: 60}}>Catatan</Text>
             <Text style={{fontSize: 14, marginRight: 10}}>:</Text>

@@ -1,66 +1,93 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Dimensions
+  Dimensions,
+  Image,
 } from 'react-native';
 import {Button, HasilNotif, Header2} from '../../components';
 import {IconDelete, IconEdit} from '../../assets';
+import {getData} from '../../utils'
+import {Fire} from '../../config';
+import {Header, NotifAlat} from '../../components';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const HasilLaporan = ({navigation, route}) => {
-  const {waktu, merk, tahun, lokasi, catatan, kondisi, alat, photo} = route.params;
+  const {id} = route.params;
+  const [nilai, setNilai] = React.useState({});
+
+  const parseArray = listObject => {
+    const data = [];
+    Object.keys(listObject).map(key => {
+      data.push({
+        id: key,
+        data: listObject[key],
+      });
+    })
+    return data;
+  }
+
+  useEffect(() => {
+    Fire.database()
+      .ref('aws/' + id)
+      .on('value', (snapshot) => {
+        setNilai(snapshot.val());
+      });
+  }, [])
   return (
     <View style={styles.page}>
       <Header2 title="Hasil Laporan" onPress={() => navigation.navigate('Notif')} />
       <ScrollView>
+          {/* <Text>{nilai}</Text> 
+          <Text>{nilaiBaru.photo}</Text>
+          <Image source={{uri: nilaiBaru.photo}} style={{width: 100, height: 100}} /> */}
         <View style={{marginVertical: 5, justifyContent: 'space-between',}}>
           <Text style={styles.judul}>LAPORAN HARIAN STATUS PERALATAN OPERASIONAL UTAMA (ALOPTAMA)</Text>
           <View style={styles.border}/>
           <View style={styles.content1}>
             <Text style={styles.text3}>Alat</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{alat}</Text>
+            <Text style={styles.hasil}>{nilai.alat}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Waktu</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{waktu}</Text>
+            <Text style={styles.hasil}>{nilai.waktu}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Lokasi</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{lokasi}</Text>
+            <Text style={styles.hasil}>{nilai.lokasi}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Merk</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{merk}</Text>
+            <Text style={styles.hasil}>{nilai.merk}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Tahun</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{tahun}</Text>
+            <Text style={styles.hasil}>{nilai.tahun}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Kondisi</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{kondisi}</Text>
+            <Text style={styles.hasil}>{nilai.kondisi}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Catatan</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{catatan}</Text>
+            <Text style={styles.hasil}>{nilai.catatan}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Foto</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{photo}</Text>
+            <Image source={{uri: nilai.photo}} style={{width: 100, height: 100}}/>
           </View>
           <View style={styles.wrap}>
             <TouchableOpacity style={styles.button}>
@@ -95,7 +122,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    
+
     marginBottom: 10
   },
   // text: {
@@ -148,7 +175,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   hasil: {
-    fontSize: 16, 
+    fontSize: 16,
     maxWidth: 200,
   }
 });
