@@ -71,36 +71,27 @@ const Add = ({navigation}) => {
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
 
-  //    Fire.auth().onAuthStateChanged(function (user) {
-  //   if (user) {
-  //     user.getIdToken()
-  //     .then(function (idToken) {
-  //       return idToken;
-  //     });
-  //   }
-  // });
-    const data = {
-      waktu: form.waktu,
-      merk: form.merk,
-      tahun: form.tahun,
-      lokasi: form.lokasi,
-      catatan: form.catatan,
-      kondisi: form.kondisi,
-      alat: form.alat,
-      photo: dbPhoto,
-      uid: uid
-    };
+    Fire.auth().onAuthStateChanged(user => {
+      const data = {
+        waktu: form.waktu,
+        merk: form.merk,
+        tahun: form.tahun,
+        lokasi: form.lokasi,
+        catatan: form.catatan,
+        kondisi: form.kondisi,
+        alat: form.alat,
+        photo: dbPhoto,
+        uid: user.uid,
+      };
+      Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
 
-    Fire.database()
-      .ref('users/' + uid + 'Laporan/' + `${form.alat}`)
-      .push(data);
+      getData('user').then(res => {
+        console.log('data', res);
+      });
 
-    getData('user').then(res => {
-      console.log('data', res);
+      storeData('user', data);
+      navigation.navigate('Notif');
     });
-
-    storeData('user', data);
-    navigation.navigate('Notif');
   };
 
   return (

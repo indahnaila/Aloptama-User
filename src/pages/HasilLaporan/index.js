@@ -34,12 +34,14 @@ const HasilLaporan = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    Fire.auth().onAuthStateChanged(user => {
     Fire.database()
-      .ref('Laporan/' + id)
+      .ref(`Laporan/${user.uid}/${id}`)
       .on('value', snapshot => {
         const dataRes = snapshot.val()
         setNilai(dataRes);
       });
+    })
   }, []);
 
   return (
@@ -97,16 +99,6 @@ const HasilLaporan = ({navigation, route}) => {
               style={{width: 200, height: 200, marginTop: 7}}
             />
           </View>
-          {/* <View style={styles.wrap}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={{marginRight: 5, color: 'white'}}>Edit</Text>
-              <IconEdit />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={{marginRight: 5, color: 'white'}}>Delete</Text>
-              <IconDelete />
-            </TouchableOpacity>
-          </View> */}
         </View>
       </ScrollView>
     </View>

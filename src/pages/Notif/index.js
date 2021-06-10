@@ -27,15 +27,15 @@ const Notif = ({navigation, onPress}) => {
   };
 
   React.useEffect(() => {
-    Fire.database()
-      .ref('Laporan/')
-      .on('value', snapshot => {
+    Fire.auth().onAuthStateChanged(user => {
+      Fire.database().ref(`Laporan/${user.uid}`).on('value', snapshot => {
         // alert(JSON.stringify(parseArray(snapshot.val())[0].data))
         setNilai(parseArray(snapshot.val()));
       });
+    })
   }, []);
 
-  const deleteItem = (itemLap, item) => {
+  const deleteItem = (item, itemLap) => {
     Alert.alert('Info', 'Anda yakin akan menghapus laporan ini?', [
       {
         text: 'Cancel',
@@ -45,9 +45,9 @@ const Notif = ({navigation, onPress}) => {
       {
         text: 'OK',
         onPress: () => {
-          Fire.database()
-            .ref('Laporan/' + `${item.id}/${itemLap.id}`)
-            .remove();
+          Fire.auth().onAuthStateChanged(user => {
+            Fire.database().ref(`Laporan/${user.uid}/${item.id}/${itemLap.id}`).remove();
+          });
         },
       },
     ]);
@@ -69,7 +69,7 @@ const Notif = ({navigation, onPress}) => {
                     kondisi={itemLap.data.kondisi}
                     waktu={itemLap.data.waktu}
                     catatan={itemLap.data.catatan}
-                    onDelete={() => deleteItem(itemLap, item)}
+                    onDelete={() => deleteItem(item, itemLap)}
                     onPress={() =>
                       navigation.navigate('HasilLaporan', {
                         id: `${item.id}/${itemLap.id}`,
