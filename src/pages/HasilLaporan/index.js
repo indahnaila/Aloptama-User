@@ -10,12 +10,13 @@ import {
 } from 'react-native';
 import {Button, HasilNotif, Header2} from '../../components';
 import {IconDelete, IconEdit} from '../../assets';
-import {getData} from '../../utils'
+import {getData} from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Fire} from '../../config';
 import {Header, NotifAlat} from '../../components';
 
-const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const HasilLaporan = ({navigation, route}) => {
   const {id} = route.params;
@@ -28,27 +29,31 @@ const HasilLaporan = ({navigation, route}) => {
         id: key,
         data: listObject[key],
       });
-    })
+    });
     return data;
-  }
+  };
 
   useEffect(() => {
     Fire.database()
-      .ref('aws/' + id)
-      .on('value', (snapshot) => {
-        setNilai(snapshot.val());
+      .ref('Laporan/' + id)
+      .on('value', snapshot => {
+        const dataRes = snapshot.val()
+        setNilai(dataRes);
       });
-  }, [])
+  }, []);
+
   return (
     <View style={styles.page}>
-      <Header2 title="Hasil Laporan" onPress={() => navigation.navigate('Notif')} />
+      <Header2
+        title="Hasil Laporan"
+        onPress={() => navigation.navigate('Notif')}
+      />
       <ScrollView>
-          {/* <Text>{nilai}</Text> 
-          <Text>{nilaiBaru.photo}</Text>
-          <Image source={{uri: nilaiBaru.photo}} style={{width: 100, height: 100}} /> */}
-        <View style={{marginVertical: 5, justifyContent: 'space-between',}}>
-          <Text style={styles.judul}>LAPORAN HARIAN STATUS PERALATAN OPERASIONAL UTAMA (ALOPTAMA)</Text>
-          <View style={styles.border}/>
+        <View style={{marginVertical: 5, justifyContent: 'space-between'}}>
+          <Text style={styles.judul}>
+            LAPORAN HARIAN STATUS PERALATAN OPERASIONAL UTAMA (ALOPTAMA)
+          </Text>
+          <View style={styles.border} />
           <View style={styles.content1}>
             <Text style={styles.text3}>Alat</Text>
             <Text style={styles.text4}>:</Text>
@@ -87,9 +92,12 @@ const HasilLaporan = ({navigation, route}) => {
           <View style={styles.content1}>
             <Text style={styles.text3}>Foto</Text>
             <Text style={styles.text4}>:</Text>
-            <Image source={{uri: nilai.photo}} style={{width: 100, height: 100}}/>
+            <Image
+              source={{uri: nilai.photo}}
+              style={{width: 200, height: 200, marginTop: 7}}
+            />
           </View>
-          <View style={styles.wrap}>
+          {/* <View style={styles.wrap}>
             <TouchableOpacity style={styles.button}>
               <Text style={{marginRight: 5, color: 'white'}}>Edit</Text>
               <IconEdit />
@@ -98,19 +106,8 @@ const HasilLaporan = ({navigation, route}) => {
               <Text style={{marginRight: 5, color: 'white'}}>Delete</Text>
               <IconDelete />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
-        {/* <View style={{margin: 10}}>
-          <HasilNotif />
-          <HasilNotif />
-          <HasilNotif />
-          <HasilNotif />
-          <HasilNotif />
-          <HasilNotif />
-          <View style={{marginBottom: 20}} />
-          <Button title="Download" type="secondary" />
-          <View style={{marginBottom: 20}} />
-        </View> */}
       </ScrollView>
     </View>
   );
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
 
-    marginBottom: 10
+    marginBottom: 10,
   },
   // text: {
   //   backgroundColor: '#018A83',
@@ -141,13 +138,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    width: width/4,
+    width: width / 4,
   },
   wrap: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginRight: 1,
-    marginTop: 50
+    marginTop: 50,
   },
   content1: {
     flexDirection: 'row',
@@ -177,5 +174,5 @@ const styles = StyleSheet.create({
   hasil: {
     fontSize: 16,
     maxWidth: 200,
-  }
+  },
 });

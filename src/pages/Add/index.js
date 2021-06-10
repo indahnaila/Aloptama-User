@@ -35,8 +35,8 @@ const Add = ({navigation}) => {
   });
 
   useEffect(() => {
-    getImageData()
-  }, [dbPhoto])
+    getImageData();
+  }, [dbPhoto]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -55,44 +55,54 @@ const Add = ({navigation}) => {
 
   const getImageData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@DBphoto')
-      if(value !== null) {
+      const value = await AsyncStorage.getItem('@DBphoto');
+      if (value !== null) {
         // value previously stored
-        setDbPhoto(value)
+        setDbPhoto(value);
       }
-    } catch(e) {
+    } catch (e) {
       // error reading value
     }
-  }
+  };
 
   const onContinue = () => {
     setForm('reset');
     Alert.alert('Sukses!', 'Laporan Anda berhasil terkirim.', [
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
-    
+
+  //    Fire.auth().onAuthStateChanged(function (user) {
+  //   if (user) {
+  //     user.getIdToken()
+  //     .then(function (idToken) {
+  //       return idToken;
+  //     });
+  //   }
+  // });
     const data = {
       waktu: form.waktu,
       merk: form.merk,
       tahun: form.tahun,
       lokasi: form.lokasi,
       catatan: form.catatan,
+      kondisi: form.kondisi,
       alat: form.alat,
-      photo: dbPhoto
+      photo: dbPhoto,
+      uid: uid
     };
 
     Fire.database()
-      .ref(form.alat + '/')
+      .ref('users/' + uid + 'Laporan/' + `${form.alat}`)
       .push(data);
-      
+
     getData('user').then(res => {
-      console.log('data', res)
-    })
+      console.log('data', res);
+    });
 
     storeData('user', data);
     navigation.navigate('Notif');
   };
-  
+
   return (
     <View style={styles.lola}>
       <Header title="Pelaporan Alat" />
@@ -101,10 +111,16 @@ const Add = ({navigation}) => {
           {/* <PickerList pickerValue={value => console.log('value dari picker ==> ', value)} /> */}
           <List
             title="Alat"
-            type='secondary'
+            type="secondary"
             placeholder="(type here)"
             value={form.alat}
             onChangeText={value => setForm('alat', value)}
+          />
+          <List
+            title="Waktu"
+            placeholder="(DD/MM/YYYY)"
+            value={form.waktu}
+            onChangeText={value => setForm('waktu', value)}
           />
           {/* <View style={{flexDirection: 'row', marginBottom: 20}}>
             <Text style={{fontSize: 14, width: 60}}>Waktu</Text>
@@ -144,11 +160,10 @@ const Add = ({navigation}) => {
           />
           <List
             title="Kondisi"
-            type='secondary'
+            type="secondary"
             placeholder="(ON/OFF)"
             value={form.kondisi}
             onChangeText={value => setForm('kondisi', value)}
-            
           />
           <View style={styles.catatan}>
             <Text style={{fontSize: 14, width: 60}}>Catatan</Text>
@@ -163,7 +178,7 @@ const Add = ({navigation}) => {
           </View>
           <List title="Foto" type="listIcon" />
           <View style={{marginBottom: 50}} />
-          <Button title="Kirim" type="secondary" onPress={onContinue}/>
+          <Button title="Kirim" type="secondary" onPress={onContinue} />
         </View>
         <View style={{marginBottom: 10}} />
       </ScrollView>

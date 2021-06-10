@@ -45,8 +45,8 @@ const ListIcon = () => {
         } else {
           console.log('response getImage: ', response.base64);
           // disini disimpen aja fotonya ke async storage
-          storeData(`data:${response.type};base64, ${response.base64}`);
-          // setphotoForDB (`data:${response.type};base64, ${response.base64}`)
+          // storeData(`data:${response.type};base64, ${response.base64}`);
+          setphotoForDB (`data:${response.type};base64, ${response.base64}`)
           const source = {uri: response.uri};
           setPhoto(source);
           setHasPhoto(true);
@@ -76,15 +76,15 @@ const ListIcon = () => {
         const source = {uri: response.uri};
         setPhoto(source);
         setHasPhoto(true);
+        storeData(`data:${response.type};base64, ${response.base64}`);
       }
     });
   };
 
-  const UploadPhoto = ({nambah}) => {
+  const UploadPhoto = () => {
     Fire.database()
       .ref('aws/' + '/')
       .update({photo: photoForDB});
-    storeData('user', data);
     navigation.navigate('HasilLaporan', data);
   };
   return (
