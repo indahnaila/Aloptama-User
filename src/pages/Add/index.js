@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {Button, Header, List, PickerList} from '../../components';
-import {getData, storeData, useForm} from '../../utils';
+import {generateFullDate, getData, storeData, useForm} from '../../utils';
 import {Fire} from '../../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -73,16 +73,13 @@ const Add = ({navigation}) => {
 
     Fire.auth().onAuthStateChanged(user => {
       const data = {
-        waktu: form.waktu,
-        merk: form.merk,
-        tahun: form.tahun,
-        lokasi: form.lokasi,
-        catatan: form.catatan,
-        kondisi: form.kondisi,
-        alat: form.alat,
+        ...form,
         photo: dbPhoto,
         uid: user.uid,
       };
+      const dateTime = generateFullDate();
+      const email = Fire.auth().currentUser.email
+      Fire.database().ref(`Admin/${user.uid}`).update({[form.alat.toUpperCase()]: form.kondisi, Tanggal: dateTime, Email: email})
       Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
 
       getData('user').then(res => {
