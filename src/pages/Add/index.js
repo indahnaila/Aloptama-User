@@ -12,7 +12,7 @@ import {
 import {Button, Header, List, PickerList} from '../../components';
 import {generateFullDate, getData, storeData, useForm} from '../../utils';
 import {Fire} from '../../config';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '../../components/DateTimeField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
@@ -104,11 +104,14 @@ const Add = ({navigation}) => {
             value={form.alat}
             onChangeText={value => setForm('alat', value)}
           />
-          <List
+          <DateTimePicker
             title="Waktu"
             placeholder="(DD/MM/YYYY)"
             value={form.waktu}
-            onChangeText={value => setForm('waktu', value)}
+            onChangeDate={value => {
+              console.log('ajsda', value);
+              setForm('waktu', value);
+            }}
           />
           {/* <View style={{flexDirection: 'row', marginBottom: 20}}>
             <Text style={{fontSize: 14, width: 60}}>Waktu</Text>

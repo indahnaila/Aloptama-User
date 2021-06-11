@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TextInput, View, Platform} from 'react-native';
 import ListIcon from './ListIcon';
 
 const List = ({title, placeholder, type, value, onChangeText, onPress}) => {
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     fontSize: 14,
     borderColor: 'gray',
-    textTransform: type === 'secondary' ? 'capitalize' : 'none' ,
+    textTransform: type === 'secondary' ? 'capitalize' : 'none',
   }),
 });

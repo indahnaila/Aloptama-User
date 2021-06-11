@@ -1,12 +1,5 @@
-import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Image, ScrollView, Dimensions} from 'react-native';
 import {
   GambarSuhu,
   IconAAWS,
@@ -19,15 +12,13 @@ import {
 import {ButtonAlat, Header, NotifAlat} from '../../components';
 import {Fire} from '../../config';
 
-
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 
 const Home = ({navigation}) => {
   return (
     <View style={styles.page}>
-      <Header title='Stamet Budiarto' />
+      <Header title="Stamet Budiarto" />
       <ScrollView>
         <Image source={GambarSuhu} style={styles.foto} />
         <View style={styles.lolo}>

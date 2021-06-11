@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/Feather';
 
 const Picker2 = ({pickerValue}) => {
   const [kondisi, setKondisi] = React.useState('');
