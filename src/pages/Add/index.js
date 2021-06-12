@@ -6,13 +6,14 @@ import {
   Text,
   TextInput,
   View,
-  TouchableOpacity,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {Button, Header, List, PickerList} from '../../components';
 import {generateFullDate, getData, storeData, useForm} from '../../utils';
 import {Fire} from '../../config';
 import DateTimePicker from '../../components/DateTimeField';
+import DropdownField from '../../components/DropdownField';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
@@ -78,8 +79,14 @@ const Add = ({navigation}) => {
         uid: user.uid,
       };
       const dateTime = generateFullDate();
-      const email = Fire.auth().currentUser.email
-      Fire.database().ref(`Admin/${user.uid}`).update({[form.alat.toUpperCase()]: form.kondisi, Tanggal: dateTime, Email: email})
+      const email = Fire.auth().currentUser.email;
+      Fire.database()
+        .ref(`Admin/${user.uid}`)
+        .update({
+          [form.alat.toUpperCase()]: form.kondisi,
+          Tanggal: dateTime,
+          Email: email,
+        });
       Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
 
       getData('user').then(res => {
@@ -96,13 +103,20 @@ const Add = ({navigation}) => {
       <Header title="Pelaporan Alat" />
       <ScrollView>
         <View style={styles.kiki}>
-          {/* <PickerList pickerValue={value => console.log('value dari picker ==> ', value)} /> */}
-          <List
-            title="Alat"
-            type="secondary"
-            placeholder="(type here)"
-            value={form.alat}
-            onChangeText={value => setForm('alat', value)}
+          <DropdownField
+            label="Alat"
+            placeholder="Pilih"
+            items={[
+              {value: 'AWS', label: 'AWS'},
+              {value: 'AWOS', label: 'AWOS'},
+              {value: 'AAWS', label: 'AAWS'},
+              {value: 'Cellometer', label: 'Cellometer'},
+              {value: 'Radar', label: 'Radar'},
+              {value: 'Seiscomp3', label: 'Seiscomp3'},
+            ]}
+            onChangeValue={value => {
+              setForm('alat', value);
+            }}
           />
           <DateTimePicker
             title="Waktu"
@@ -113,24 +127,6 @@ const Add = ({navigation}) => {
               setForm('waktu', value);
             }}
           />
-          {/* <View style={{flexDirection: 'row', marginBottom: 20}}>
-            <Text style={{fontSize: 14, width: 60}}>Waktu</Text>
-            <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
-            <TouchableOpacity style={{flex: 1}} onPress={showDatepicker}>
-              <Text style={styles.date}>{String(date)}</Text>
-            </TouchableOpacity>
-          </View>
-
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )} */}
           <List
             title="Lokasi"
             placeholder="(type here)"
@@ -149,12 +145,15 @@ const Add = ({navigation}) => {
             value={form.tahun}
             onChangeText={value => setForm('tahun', value)}
           />
-          <List
-            title="Kondisi"
-            type="secondary"
-            placeholder="(ON/OFF)"
-            value={form.kondisi}
-            onChangeText={value => setForm('kondisi', value)}
+          <DropdownField
+            label="Kondisi"
+            items={[
+              {value: 'on', label: 'ON'},
+              {value: 'off', label: 'OFF'},
+            ]}
+            onChangeValue={value => {
+              setForm('kondisi', value);
+            }}
           />
           <View style={styles.catatan}>
             <Text style={{fontSize: 14, width: 60}}>Catatan</Text>
