@@ -64,6 +64,7 @@ const ListIcon = () => {
         console.log('permission diberikan');
       } else {
         console.log('permission tidak diberikan');
+        return;
       }
     } catch (err) {
       console.log(err);
