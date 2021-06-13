@@ -45,8 +45,8 @@ const ListIcon = () => {
         } else {
           console.log('response getImage: ', response.base64);
           // disini disimpen aja fotonya ke async storage
-          // storeData(`data:${response.type};base64, ${response.base64}`);
-          setphotoForDB (`data:${response.type};base64, ${response.base64}`)
+          storeData(`data:${response.type};base64, ${response.base64}`);
+          // setphotoForDB(`data:${response.type};base64, ${response.base64}`);
           const source = {uri: response.uri};
           setPhoto(source);
           setHasPhoto(true);
@@ -70,15 +70,17 @@ const ListIcon = () => {
     }
 
     launchCamera(
-      {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true}, response => {
-      if (response.didCancel || response.error) {
-      } else {
-        const source = {uri: response.uri};
-        setPhoto(source);
-        setHasPhoto(true);
-        storeData(`data:${response.type};base64, ${response.base64}`);
-      }
-    });
+      {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true},
+      response => {
+        if (response.didCancel || response.error) {
+        } else {
+          const source = {uri: response.uri};
+          setPhoto(source);
+          setHasPhoto(true);
+          storeData(`data:${response.type};base64, ${response.base64}`);
+        }
+      },
+    );
   };
 
   const UploadPhoto = () => {
@@ -92,9 +94,19 @@ const ListIcon = () => {
       <View style={styles.content}>
         <Text style={styles.text}>Foto</Text>
         <Text style={{fontSize: 16, marginRight: 10}}>:</Text>
-        <Text style={{color: 'gray'}}>(upload foto jika terjadi kerusakan)</Text>
+        <Text style={{color: 'gray'}}>
+          (upload foto jika terjadi kerusakan)
+        </Text>
       </View>
-      <Image source={photo} style={{width: width / 1.44, height: height / 5, marginLeft: 70, marginTop: -9}} />
+      <Image
+        source={photo}
+        style={{
+          width: width / 1.44,
+          height: height / 5,
+          marginLeft: 70,
+          marginTop: -9,
+        }}
+      />
       <View
         style={{
           flexDirection: 'row',
@@ -102,7 +114,7 @@ const ListIcon = () => {
           marginLeft: 100,
           marginRight: 20,
           marginTop: 10,
-          marginBottom: 20
+          marginBottom: 20,
         }}>
         <TouchableOpacity style={styles.button1} onPress={getPicture}>
           <AddCamera />

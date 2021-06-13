@@ -23,11 +23,10 @@ import {Fire} from '../../config';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-
 const Home = ({navigation}) => {
   return (
     <View style={styles.page}>
-      <Header title='Stamet Budiarto' />
+      <Header title='' />
       <ScrollView>
         <Image source={GambarSuhu} style={styles.foto} />
         <View style={styles.lolo}>

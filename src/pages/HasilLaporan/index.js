@@ -99,6 +99,11 @@ const HasilLaporan = ({navigation, route}) => {
               style={{width: 200, height: 200, marginTop: 7}}
             />
           </View>
+          <View style={styles.content1}>
+            <Text style={styles.text3}>Petugas</Text>
+            <Text style={styles.text4}>:</Text>
+            <Text style={styles.hasil}>{nilai.petugas}</Text>
+          </View>
         </View>
       </ScrollView>
     </View>

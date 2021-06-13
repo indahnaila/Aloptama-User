@@ -118,10 +118,11 @@ const styles = StyleSheet.create({
     borderColor: '#E8E8E8',
   },
   textjudul: {
-    fontSize: 12,
-    marginVertical: 4,
+    fontSize: 14,
+    marginVertical: 8,
     textTransform: 'uppercase',
-    marginLeft: 10,
+    marginLeft: 25,
     fontWeight: 'bold',
+    
   },
 });

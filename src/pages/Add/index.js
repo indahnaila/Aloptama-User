@@ -153,6 +153,12 @@ const Add = ({navigation}) => {
             value={form.kondisi}
             onChangeText={value => setForm('kondisi', value)}
           />
+          <List
+            title="Petugas"
+            placeholder="(type here)"
+            value={form.petugas}
+            onChangeText={value => setForm('petugas', value)}
+          />
           <View style={styles.catatan}>
             <Text style={{fontSize: 14, width: 60}}>Catatan</Text>
             <Text style={{fontSize: 14, marginRight: 10}}>:</Text>

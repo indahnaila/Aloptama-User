@@ -1,40 +1,28 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Chart, Header2, ListRiwayat, TabRiwayat} from '../../components';
+import React, {useEffect, useState} from 'react';
+import { StyleSheet, View} from 'react-native';
+import { Header2, HasilData, } from '../../components';
+import { Fire } from '../../config';
 
 const RiwayatAAWS = ({navigation}) => {
+  const [nilai, setNilai] = useState()
+  const currentUser = Fire.auth().currentUser;
+
+  useEffect(() =>{
+    Fire.auth().onAuthStateChanged(user => {
+        Fire.database()
+          .ref(`Laporan/${currentUser.uid}/Aaws`)
+          .on('value', snapshot => {
+            const dataRes = Object.values(snapshot.val())
+            console.log("Latest data", dataRes[dataRes.length - 1])
+            setNilai(dataRes[dataRes.length - 1]);
+          });
+        })
+  }, [])
+  
   return (
     <View style={styles.page}>
       <Header2 title="AAWS" onPress={() => navigation.goBack()} />
-      <View style={styles.tab}>
-        <TabRiwayat text="Weekly" />
-        <TabRiwayat text="Monthly" />
-        <TabRiwayat text="6 Months" />
-        <TabRiwayat text="Annual" />
-      </View>
-      <ScrollView>
-        <Chart />
-        <View style={styles.content1}>
-          <Text style={styles.text3}>Alat</Text>
-          <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>alat</Text>
-        </View>
-        <View style={styles.content1}>
-          <Text style={styles.text3}>Lokasi</Text>
-          <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>waktu</Text>
-        </View>
-        <View style={styles.content1}>
-          <Text style={styles.text3}>Merk</Text>
-          <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>lokasi</Text>
-        </View>
-        <View style={styles.content1}>
-          <Text style={styles.text3}>Tahun</Text>
-          <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>merk</Text>
-        </View>
-      </ScrollView>
+      <HasilData datas={nilai}/>
     </View>
   );
 };

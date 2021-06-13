@@ -1,65 +1,39 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Header2, Chart, ListRiwayat, TabRiwayat} from '../../components';
+;import React, { useState, useEffect } from 'react';
+import {StyleSheet, View} from 'react-native';
+import { HasilData, Header2} from '../../components';
+import {Fire} from '../../config'
+
 
 const RiwayatAWOS = ({navigation}) => {
+  const [nilai, setNilai] = useState()
+  const currentUser = Fire.auth().currentUser;
+
+  useEffect(() =>{
+    Fire.auth().onAuthStateChanged(user => {
+        Fire.database()
+          .ref(`Laporan/${currentUser.uid}/Awos`)
+          .on('value', snapshot => {
+            const dataRes = Object.values(snapshot.val())
+            console.log("Latest data", dataRes[dataRes.length - 1])
+            setNilai(dataRes[dataRes.length - 1]);
+          });
+        })
+  }, [])
+  
   return (
     <View style={styles.page}>
       <Header2 title='AWOS' onPress={() => navigation.goBack()}/>
-      <View style={styles.tab}>
-        <TabRiwayat text='Weekly'/>
-        <TabRiwayat text='Monthly'/>
-        <TabRiwayat text='6 Months'/>
-        <TabRiwayat text='Annual'/>
-      </View>
-      <Chart/>
-      <View style={styles.content1}>
-        <Text style={styles.text3}>Alat</Text>
-        <Text style={styles.text4}>:</Text>
-        <Text style={{fontSize: 14}}>alat</Text>
-      </View>
-      <View style={styles.content1}>
-        <Text style={styles.text3}>Lokasi</Text>
-        <Text style={styles.text4}>:</Text>
-        <Text style={{fontSize: 14}}>waktu</Text>
-      </View>
-      <View style={styles.content1}>
-        <Text style={styles.text3}>Merk</Text>
-        <Text style={styles.text4}>:</Text>
-        <Text style={{fontSize: 14}}>lokasi</Text>
-      </View>
-      <View style={styles.content1}>
-        <Text style={styles.text3}>Tahun</Text>
-        <Text style={styles.text4}>:</Text>
-        <Text style={{fontSize: 14}}>merk</Text>
-      </View>
+      <HasilData datas={nilai}/>
     </View>
+    
   );
 };
 
 export default RiwayatAWOS;
 
 const styles = StyleSheet.create({
-  page: {
+  page : {
     backgroundColor: '#E8E8E8',
-    flex: 1
-  },
-  tab: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  content1: {
-    flexDirection: 'row',
-    marginVertical: 3,
-    marginHorizontal: 20,
-  },
-  text3: {
-    fontSize: 14,
-    marginRight: 10,
-    width: 50,
-  },
-  text4: {
-    marginRight: 10,
-    fontSize: 14,
+    flex: 1,
   },
 });
