@@ -1,4 +1,4 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 
 export const generateFullDate = () => {
   const dayMap = new Map([
@@ -20,10 +20,10 @@ export const generateFullDate = () => {
   return `${currentDay}, ${currentDate}/${currentMonth}/${currentYear}, ${currentHour}:${currentMinute}`;
 };
 
-export const getPlatformPath = ({path, uri}) => {
+export const getPlatformPath = ({ path, uri }) => {
   return Platform.select({
-    android: {value: path},
-    ios: {value: uri},
+    android: { value: path },
+    ios: { value: uri },
   });
 };
 

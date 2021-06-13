@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
-import {TextInput} from 'react-native-paper';
-import {LogoBig} from '../../assets';
-import {Button} from '../../components';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { LogoBig } from '../../assets';
+import { Button } from '../../components';
 import auth from '@react-native-firebase/auth';
-import {useForm, storeData} from '../../utils';
-import {showMessage} from 'react-native-flash-message';
+import { useForm, storeData } from '../../utils';
+import { showMessage } from 'react-native-flash-message';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [form, setForm] = useForm({
     username: '',
     password: '',
@@ -23,16 +23,6 @@ const Login = ({navigation}) => {
         console.log('success:', res);
         storeData('user', res);
         navigation.replace('MainApp');
-        // Fire.database()
-        //   .ref(`users/${res.user.uid}/`)
-        //   .once('value')
-        //   .then(resDB => {
-        //     console.log('data user:', resDB.val());
-        //     if (resDB.val()) {
-        //       storeData('user', resDB.val());
-        //       navigation.replace('MainApp');
-        //     }
-        //   });
       })
       .catch(err => {
         console.log('error:', err);
@@ -88,11 +78,11 @@ const Login = ({navigation}) => {
           onChangeText={value => setForm('username', value)}
         />
         <Text style={styles.text2}>Password</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TextInput
-            style={[styles.input, {flex: 1}]}
-            labelStyle={{color: 'white'}}
-            secureTextEntry={!obscure}
+            style={[styles.input, { flex: 1 }]}
+            labelStyle={{ color: 'white' }}
+            secureTextEntry={obscure}
             value={form.password}
             dense
             theme={{
@@ -104,7 +94,7 @@ const Login = ({navigation}) => {
             onChangeText={value => setForm('password', value)}
             right={
               <TextInput.Icon
-                name={obscure ? 'eye' : 'eye-off'}
+                name={obscure ? 'eye-off' : 'eye'}
                 onPress={() => setObscure(!obscure)}
               />
             }
@@ -116,7 +106,7 @@ const Login = ({navigation}) => {
           value={form.header}
           onChangeText={value => setForm('header', value)}
         /> */}
-        <View style={{marginBottom: 30}} />
+        <View style={{ marginBottom: 30 }} />
         {!loading ? (
           <Button title="Masuk" onPress={onContinue} />
         ) : (

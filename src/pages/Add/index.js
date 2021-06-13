@@ -1,16 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
-
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
-import {Button, Header, List} from '../../components';
-import {useForm} from '../../utils';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import { Button, Header, List } from '../../components';
+import { useForm } from '../../utils';
 import DateTimePicker from '../../components/DateTimeField';
 import DropdownField from '../../components/DropdownField';
 import ImagePicker from '../../components/ImagePicker';
-import {showMessage} from 'react-native-flash-message';
+import { showMessage } from 'react-native-flash-message';
+import AuthContext from '../../router/AuthContext';
+import { generateFullDate } from '../../utils';
 
 const Add = () => {
+  const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState();
   const [form, setForm] = useForm({
     waktu: '',
@@ -27,21 +37,35 @@ const Add = () => {
     try {
       var reference = storage().ref(ref);
       var status = await reference.putFile(photo.uri);
+      console.log('status', status);
       if (status.state === 'success') {
         return true;
+      } else {
+        throw new Error();
       }
-      throw new Error();
     } catch (e) {
       return false;
     }
   };
 
   const onContinue = async () => {
+    setLoading(true);
     const ref = 'photos/' + photo.fileName;
+    console.log('ref', ref);
     const uploadStatus = await handleUpload(ref);
+    console.log('upload', uploadStatus);
     if (uploadStatus) {
+      const dateTime = generateFullDate();
+      const email = user.email;
       setForm('photo', ref);
-      database().ref(`Laporan/${form.alat}`).set(form);
+      database().ref(`Laporan/${user.uid}/${form.alat}`).set(form);
+      database()
+        .ref(`Admin/${user.uid}`)
+        .update({
+          [form.alat.toUpperCase()]: form.kondisi,
+          Tanggal: dateTime,
+          Email: email,
+        });
     } else {
       showMessage({
         message: 'Batal memilih gambar',
@@ -50,35 +74,7 @@ const Add = () => {
         color: 'white',
       });
     }
-    // setForm('reset');
-    // Alert.alert('Sukses!', 'Laporan Anda berhasil terkirim.', [
-    //   {text: 'OK', onPress: () => console.log('OK Pressed')},
-    // ]);
-
-    // Fire.auth().onAuthStateChanged(user => {
-    //   const data = {
-    //     ...form,
-    //     photo: dbPhoto,
-    //     uid: user.uid,
-    //   };
-    //   const dateTime = generateFullDate();
-    //   const email = Fire.auth().currentUser.email;
-    //   Fire.database()
-    //     .ref(`Admin/${user.uid}`)
-    //     .update({
-    //       [form.alat.toUpperCase()]: form.kondisi,
-    //       Tanggal: dateTime,
-    //       Email: email,
-    //     });
-    //   Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
-
-    //   getData('user').then(res => {
-    //     console.log('data', res);
-    //   });
-
-    //   storeData('user', data);
-    //   navigation.navigate('Notif');
-    // });
+    setLoading(false);
   };
 
   return (
@@ -90,12 +86,12 @@ const Add = () => {
             label="Alat"
             placeholder="Pilih"
             items={[
-              {value: 'AWS', label: 'AWS'},
-              {value: 'AWOS', label: 'AWOS'},
-              {value: 'AAWS', label: 'AAWS'},
-              {value: 'Cellometer', label: 'Cellometer'},
-              {value: 'Radar', label: 'Radar'},
-              {value: 'Seiscomp3', label: 'Seiscomp3'},
+              { value: 'AWS', label: 'AWS' },
+              { value: 'AWOS', label: 'AWOS' },
+              { value: 'AAWS', label: 'AAWS' },
+              { value: 'Cellometer', label: 'Cellometer' },
+              { value: 'Radar', label: 'Radar' },
+              { value: 'Seiscomp3', label: 'Seiscomp3' },
             ]}
             onChangeValue={value => {
               setForm('alat', value);
@@ -131,16 +127,16 @@ const Add = () => {
           <DropdownField
             label="Kondisi"
             items={[
-              {value: 'on', label: 'ON'},
-              {value: 'off', label: 'OFF'},
+              { value: 'on', label: 'ON' },
+              { value: 'off', label: 'OFF' },
             ]}
             onChangeValue={value => {
               setForm('kondisi', value);
             }}
           />
           <View style={styles.catatan}>
-            <Text style={{fontSize: 14, width: 60}}>Catatan</Text>
-            <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
+            <Text style={{ fontSize: 14, width: 60 }}>Catatan</Text>
+            <Text style={{ fontSize: 14, marginRight: 10 }}>:</Text>
             <TextInput
               style={styles.input}
               underlineColorAndroid="transparent"
@@ -150,10 +146,14 @@ const Add = () => {
             />
           </View>
           <ImagePicker onChangeValue={value => setPhoto(value)} />
-          <View style={{marginBottom: 50}} />
-          <Button title="Kirim" type="secondary" onPress={onContinue} />
+          <View style={{ marginBottom: 50 }} />
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <Button title="Kirim" type="secondary" onPress={onContinue} />
+          )}
         </View>
-        <View style={{marginBottom: 10}} />
+        <View style={{ marginBottom: 10 }} />
       </ScrollView>
     </View>
   );

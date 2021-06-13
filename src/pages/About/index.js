@@ -1,16 +1,16 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Dimensions, Text, View} from 'react-native';
-import {showMessage} from 'react-native-flash-message';
-import {LogoBig, LogoBMKG} from '../../assets';
-import {Button, Header} from '../../components';
-import {Fire} from '../../config';
+import { ScrollView, StyleSheet, Dimensions, Text, View } from 'react-native';
+import { showMessage } from 'react-native-flash-message';
+import { LogoBig, LogoBMKG } from '../../assets';
+import { Button, Header } from '../../components';
+import auth from '@react-native-firebase/auth';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const About = ({navigation}) => {
+const About = ({ navigation }) => {
   const signOut = () => {
-    Fire.auth()
+    auth()
       .signOut()
       .then(() => {
         navigation.replace('Login');
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 30,
-    marginBottom: 20
+    marginBottom: 20,
   },
   page: {
     backgroundColor: '#E8E8E8',
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 });
