@@ -1,19 +1,19 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {LogoBig} from '../../assets';
-import { Fire } from '../../config';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { LogoBig } from '../../assets';
+import auth from '@react-native-firebase/auth';
 
-const Splash = ({navigation}) => {
+const Splash = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
-      Fire.auth().onAuthStateChanged(user => {
+      auth().onAuthStateChanged(user => {
         if (user) {
-          console.log('user:', user)
-          navigation.replace('MainApp')
+          console.log('user:', user);
+          navigation.replace('MainApp');
         } else {
-          navigation.replace('Login')
+          navigation.replace('Login');
         }
-      })
+      });
     }, 3000);
   }, [navigation]);
   return (
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 100
+    paddingBottom: 100,
   },
 });

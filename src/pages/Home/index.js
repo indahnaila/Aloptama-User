@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Image, ScrollView, Dimensions} from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Dimensions } from 'react-native';
 import {
   GambarSuhu,
   IconAAWS,
@@ -9,13 +9,12 @@ import {
   IconRadar,
   IconSeiscomp3,
 } from '../../assets';
-import {ButtonAlat, Header, NotifAlat} from '../../components';
-import {Fire} from '../../config';
+import { ButtonAlat, Header } from '../../components';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.page}>
       <Header title="Stamet Budiarto" />

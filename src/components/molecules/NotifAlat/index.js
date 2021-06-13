@@ -1,23 +1,41 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
-import {IconSukses} from '../../../assets';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import { IconSukses } from '../../../assets';
 
-const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
-const NotifAlat = ({navigation, onPress, kondisi, waktu, catatan, onDelete}) => {
+const NotifAlat = ({
+  navigation,
+  onPress,
+  kondisi,
+  waktu,
+  catatan,
+  onDelete,
+}) => {
   return (
-    <TouchableOpacity style={styles.page} onPress={onPress} onLongPress={onDelete}>
+    <TouchableOpacity
+      style={styles.page}
+      onPress={onPress}
+      onLongPress={onDelete}>
       <View style={styles.content}>
-        <Image source={IconSukses}  />
-        <View style={{flex: 1}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Image source={IconSukses} />
+        <View style={{ flex: 1 }}>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.text1}>{kondisi}</Text>
-            <Text style={{fontSize: 12, textTransform: 'capitalize'}}>{waktu}</Text>
+            <Text style={{ fontSize: 12, textTransform: 'capitalize' }}>
+              {waktu}
+            </Text>
           </View>
-          <Text style={styles.text}>
-            {catatan}
-          </Text>
+          <Text style={styles.text}>{catatan}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -41,11 +59,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     marginLeft: 10,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   page: {
     backgroundColor: '#F5F5F5',
-    height: height/10,
+    height: height / 10,
     borderBottomWidth: 1,
     borderColor: '#E8E8E8',
   },

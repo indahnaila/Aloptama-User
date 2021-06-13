@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
+
 import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Button, Header, List} from '../../components';
 import {useForm} from '../../utils';
-import {Fire} from '../../config';
 import DateTimePicker from '../../components/DateTimeField';
 import DropdownField from '../../components/DropdownField';
 import ImagePicker from '../../components/ImagePicker';
+import {showMessage} from 'react-native-flash-message';
 
 const Add = () => {
   const [photo, setPhoto] = useState();
@@ -20,19 +23,33 @@ const Add = () => {
     photo: '',
   });
 
-  const handleUpload = async () => {
-    var storage = Fire.storage();
-    var storageRef = storage.ref();
-    var status = await storageRef
-      .child('photos/' + photo.fileName)
-      .putFile(photo.uri);
-    if (status.state === 'success') {
-      console.log('success', status);
+  const handleUpload = async ref => {
+    try {
+      var reference = storage().ref(ref);
+      var status = await reference.putFile(photo.uri);
+      if (status.state === 'success') {
+        return true;
+      }
+      throw new Error();
+    } catch (e) {
+      return false;
     }
   };
 
-  const onContinue = () => {
-    handleUpload();
+  const onContinue = async () => {
+    const ref = 'photos/' + photo.fileName;
+    const uploadStatus = await handleUpload(ref);
+    if (uploadStatus) {
+      setForm('photo', ref);
+      database().ref(`Laporan/${form.alat}`).set(form);
+    } else {
+      showMessage({
+        message: 'Batal memilih gambar',
+        type: 'default',
+        backgroundColor: 'red',
+        color: 'white',
+      });
+    }
     // setForm('reset');
     // Alert.alert('Sukses!', 'Laporan Anda berhasil terkirim.', [
     //   {text: 'OK', onPress: () => console.log('OK Pressed')},

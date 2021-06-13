@@ -1,25 +1,21 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Dimensions,
   Image,
 } from 'react-native';
-import {Button, HasilNotif, Header2} from '../../components';
-import {IconDelete, IconEdit} from '../../assets';
-import {getData} from '../../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Fire} from '../../config';
-import {Header, NotifAlat} from '../../components';
+import { Header2 } from '../../components';
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const HasilLaporan = ({navigation, route}) => {
-  const {id} = route.params;
+const HasilLaporan = ({ navigation, route }) => {
+  const { id } = route.params;
   const [nilai, setNilai] = React.useState({});
 
   const parseArray = listObject => {
@@ -34,14 +30,14 @@ const HasilLaporan = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    Fire.auth().onAuthStateChanged(user => {
-    Fire.database()
-      .ref(`Laporan/${user.uid}/${id}`)
-      .on('value', snapshot => {
-        const dataRes = snapshot.val()
-        setNilai(dataRes);
-      });
-    })
+    auth().onAuthStateChanged(user => {
+      database()
+        .ref(`Laporan/${user.uid}/${id}`)
+        .on('value', snapshot => {
+          const dataRes = snapshot.val();
+          setNilai(dataRes);
+        });
+    });
   }, []);
 
   return (
@@ -51,7 +47,7 @@ const HasilLaporan = ({navigation, route}) => {
         onPress={() => navigation.navigate('Notif')}
       />
       <ScrollView>
-        <View style={{marginVertical: 5, justifyContent: 'space-between'}}>
+        <View style={{ marginVertical: 5, justifyContent: 'space-between' }}>
           <Text style={styles.judul}>
             LAPORAN HARIAN STATUS PERALATAN OPERASIONAL UTAMA (ALOPTAMA)
           </Text>
@@ -95,8 +91,8 @@ const HasilLaporan = ({navigation, route}) => {
             <Text style={styles.text3}>Foto</Text>
             <Text style={styles.text4}>:</Text>
             <Image
-              source={{uri: nilai.photo}}
-              style={{width: 200, height: 200, marginTop: 7}}
+              source={{ uri: nilai.photo }}
+              style={{ width: 200, height: 200, marginTop: 7 }}
             />
           </View>
         </View>
