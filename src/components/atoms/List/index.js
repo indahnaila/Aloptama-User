@@ -1,17 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View, Platform} from 'react-native';
-import ListIcon from './ListIcon';
+import React from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
-const List = ({title, placeholder, type, value, onChangeText, onPress}) => {
-  if (type === 'listIcon') {
-    return <ListIcon />;
-  }
+const List = ({title, placeholder, value, onChangeText, onPress}) => {
   return (
     <View style={styles.content}>
       <Text style={styles.text}>{title}</Text>
       <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
       <TextInput
-        style={styles.input(type)}
+        style={styles.input}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
         value={value}
@@ -33,7 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: 60,
   },
-  input: type => ({
+  input: {
     borderBottomWidth: 1,
     flex: 1,
     display: 'flex',
@@ -41,6 +37,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     fontSize: 14,
     borderColor: 'gray',
-    textTransform: type === 'secondary' ? 'capitalize' : 'none',
-  }),
+    textTransform: 'none',
+  },
 });

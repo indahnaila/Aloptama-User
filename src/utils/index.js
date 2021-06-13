@@ -1,3 +1,3 @@
-export * from './useForm'
-export * from './localstorage'
-export * from './functions'
+export * from './useForm';
+export * from './localstorage';
+export * from './functions';

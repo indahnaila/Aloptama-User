@@ -1,8 +1,9 @@
-import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import {TextInput} from 'react-native-paper';
 import {LogoBig} from '../../assets';
 import {Button} from '../../components';
-import {Fire} from '../../config';
+import auth from '@react-native-firebase/auth';
 import {useForm, storeData} from '../../utils';
 import {showMessage} from 'react-native-flash-message';
 
@@ -11,33 +12,27 @@ const Login = ({navigation}) => {
     username: '',
     password: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [obscure, setObscure] = useState(true);
 
-  const onContinue = () => {
-    console.log(form);
-    // Fire.auth().onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     user.getIdToken().then(function(idToken) {  // <------ Check this line
-    //         alert(idToken); // It shows the Firebase token now
-    //         return idToken;
-    //     });
-    //   }
-    // });
-
-    // (ini fungsi login mulai)
-    Fire.auth()
+  const onContinue = async () => {
+    setLoading(true);
+    await auth()
       .signInWithEmailAndPassword(form.username, form.password)
       .then(res => {
         console.log('success:', res);
-        Fire.database()
-          .ref(`users/${res.user.uid}/`)
-          .once('value')
-          .then(resDB => {
-            console.log('data user:', resDB.val());
-            if (resDB.val()) {
-              storeData('user', resDB.val());
-              navigation.replace('MainApp');
-            }
-          });
+        storeData('user', res);
+        navigation.replace('MainApp');
+        // Fire.database()
+        //   .ref(`users/${res.user.uid}/`)
+        //   .once('value')
+        //   .then(resDB => {
+        //     console.log('data user:', resDB.val());
+        //     if (resDB.val()) {
+        //       storeData('user', resDB.val());
+        //       navigation.replace('MainApp');
+        //     }
+        //   });
       })
       .catch(err => {
         console.log('error:', err);
@@ -48,11 +43,12 @@ const Login = ({navigation}) => {
           color: 'white',
         });
       });
+    setLoading(false);
   };
   // (ini fungsi login akhir)
 
   //  (ini bagian registrasi dimulai)
-  //   Fire.auth()
+  //   auth()
   //     .createUserWithEmailAndPassword(form.username, form.password)
   //     .then(success => {
   //       setForm('reset');
@@ -82,15 +78,38 @@ const Login = ({navigation}) => {
         <TextInput
           style={styles.input}
           value={form.username}
+          dense
+          theme={{
+            colors: {
+              text: 'white',
+              primary: '#7BE2E1',
+            },
+          }}
           onChangeText={value => setForm('username', value)}
         />
         <Text style={styles.text2}>Password</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          value={form.password}
-          onChangeText={value => setForm('password', value)}
-        />
+        <View style={{flexDirection: 'row'}}>
+          <TextInput
+            style={[styles.input, {flex: 1}]}
+            labelStyle={{color: 'white'}}
+            secureTextEntry={!obscure}
+            value={form.password}
+            dense
+            theme={{
+              colors: {
+                text: 'white',
+                primary: '#7BE2E1',
+              },
+            }}
+            onChangeText={value => setForm('password', value)}
+            right={
+              <TextInput.Icon
+                name={obscure ? 'eye' : 'eye-off'}
+                onPress={() => setObscure(!obscure)}
+              />
+            }
+          />
+        </View>
         {/* <Text style={styles.text}>nama stasiun</Text>
         <TextInput
           style={styles.input}
@@ -98,7 +117,11 @@ const Login = ({navigation}) => {
           onChangeText={value => setForm('header', value)}
         /> */}
         <View style={{marginBottom: 30}} />
-        <Button title="Masuk" onPress={onContinue} />
+        {!loading ? (
+          <Button title="Masuk" onPress={onContinue} />
+        ) : (
+          <ActivityIndicator color="white" />
+        )}
       </View>
     </View>
   );
@@ -133,6 +156,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#7BE2E1',
     color: 'white',
+    backgroundColor: 'transparent',
     paddingVertical: 1,
     fontSize: 16,
   },

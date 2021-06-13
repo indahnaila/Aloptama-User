@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import moment from 'moment';
 import {StyleSheet, Text, TextInput, View, Platform} from 'react-native';
-import ListIcon from '../atoms/List/ListIcon';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const DateTimeField = ({title, placeholder, type, value, onChangeDate}) => {
+const DateTimeField = ({title, placeholder, value, onChangeDate}) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -29,15 +28,12 @@ const DateTimeField = ({title, placeholder, type, value, onChangeDate}) => {
     showMode('time');
   };
 
-  if (type === 'listIcon') {
-    return <ListIcon />;
-  }
   return (
     <View style={styles.content}>
       <Text style={styles.text}>{title}</Text>
       <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
       <TextInput
-        style={styles.input(type)}
+        style={styles.input}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
         value={value}
@@ -74,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: 60,
   },
-  input: type => ({
+  input: {
     borderBottomWidth: 1,
     flex: 1,
     display: 'flex',
@@ -82,6 +78,6 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     fontSize: 14,
     borderColor: 'gray',
-    textTransform: type === 'secondary' ? 'capitalize' : 'none',
-  }),
+    textTransform: 'none',
+  },
 });

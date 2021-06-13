@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "261696690074",
+    "firebase_url": "https://aloptama-user-default-rtdb.firebaseio.com",
+    "project_id": "aloptama-user",
+    "storage_bucket": "aloptama-user.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:261696690074:android:c0a7830c401690fe02cc23",
+        "android_client_info": {
+          "package_name": "com.userapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "261696690074-44ah21vt1v36aasrtkn0h91cvm7oh89e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkq_KyPy5-sNRso4S2UomGT2ph4vI3qbY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "261696690074-44ah21vt1v36aasrtkn0h91cvm7oh89e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,29 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Dimensions,
-  Platform,
-} from 'react-native';
-import {Button, Header, List, PickerList} from '../../components';
-import {generateFullDate, getData, storeData, useForm} from '../../utils';
+import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, Header, List} from '../../components';
+import {useForm} from '../../utils';
 import {Fire} from '../../config';
 import DateTimePicker from '../../components/DateTimeField';
 import DropdownField from '../../components/DropdownField';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from '../../components/ImagePicker';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
-
-const Add = ({navigation}) => {
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const [dbPhoto, setDbPhoto] = useState(null);
+const Add = () => {
+  const [photo, setPhoto] = useState();
   const [form, setForm] = useForm({
     waktu: '',
     merk: '',
@@ -35,67 +20,48 @@ const Add = ({navigation}) => {
     photo: '',
   });
 
-  useEffect(() => {
-    getImageData();
-  }, [dbPhoto]);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-
-  const showMode = currentMode => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const getImageData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@DBphoto');
-      if (value !== null) {
-        // value previously stored
-        setDbPhoto(value);
-      }
-    } catch (e) {
-      // error reading value
+  const handleUpload = async () => {
+    var storage = Fire.storage();
+    var storageRef = storage.ref();
+    var status = await storageRef
+      .child('photos/' + photo.fileName)
+      .putFile(photo.uri);
+    if (status.state === 'success') {
+      console.log('success', status);
     }
   };
 
   const onContinue = () => {
-    setForm('reset');
-    Alert.alert('Sukses!', 'Laporan Anda berhasil terkirim.', [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
+    handleUpload();
+    // setForm('reset');
+    // Alert.alert('Sukses!', 'Laporan Anda berhasil terkirim.', [
+    //   {text: 'OK', onPress: () => console.log('OK Pressed')},
+    // ]);
 
-    Fire.auth().onAuthStateChanged(user => {
-      const data = {
-        ...form,
-        photo: dbPhoto,
-        uid: user.uid,
-      };
-      const dateTime = generateFullDate();
-      const email = Fire.auth().currentUser.email;
-      Fire.database()
-        .ref(`Admin/${user.uid}`)
-        .update({
-          [form.alat.toUpperCase()]: form.kondisi,
-          Tanggal: dateTime,
-          Email: email,
-        });
-      Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
+    // Fire.auth().onAuthStateChanged(user => {
+    //   const data = {
+    //     ...form,
+    //     photo: dbPhoto,
+    //     uid: user.uid,
+    //   };
+    //   const dateTime = generateFullDate();
+    //   const email = Fire.auth().currentUser.email;
+    //   Fire.database()
+    //     .ref(`Admin/${user.uid}`)
+    //     .update({
+    //       [form.alat.toUpperCase()]: form.kondisi,
+    //       Tanggal: dateTime,
+    //       Email: email,
+    //     });
+    //   Fire.database().ref(`Laporan/${user.uid}/${form.alat}`).push(data);
 
-      getData('user').then(res => {
-        console.log('data', res);
-      });
+    //   getData('user').then(res => {
+    //     console.log('data', res);
+    //   });
 
-      storeData('user', data);
-      navigation.navigate('Notif');
-    });
+    //   storeData('user', data);
+    //   navigation.navigate('Notif');
+    // });
   };
 
   return (
@@ -166,7 +132,7 @@ const Add = ({navigation}) => {
               onChangeText={value => setForm('catatan', value)}
             />
           </View>
-          <List title="Foto" type="listIcon" />
+          <ImagePicker onChangeValue={value => setPhoto(value)} />
           <View style={{marginBottom: 50}} />
           <Button title="Kirim" type="secondary" onPress={onContinue} />
         </View>
