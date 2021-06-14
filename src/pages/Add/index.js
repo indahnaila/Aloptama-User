@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
+import moment from 'moment';
 import {
   ScrollView,
   StyleSheet,
@@ -46,49 +47,61 @@ const Add = () => {
     }
   };
 
-  const updateReport = async () => {
-    await database().ref(`Laporan/${user.uid}/${form.alat}`).update(form);
+  const updateReport = async photoRef => {
+    console.log('form ref', photoRef);
+    console.log('form add', form);
+    await database()
+      .ref(
+        `Laporan/${user.uid}/${form.alat}/${moment(form.waktu).format(
+          'YYYY-MM-DD',
+        )}`,
+      )
+      .set({
+        ...form,
+        photo: photoRef,
+      });
   };
 
   const updateLatest = async () => {
+    const currentDate = new Date();
     await database()
       .ref(`Admin/${user.uid}`)
-      .set(form)
       .update({
         [form.alat.toUpperCase()]: form.kondisi,
-        Tanggal: new Date.now().toISOString(),
+        Tanggal: currentDate.toISOString(),
         Email: user.email,
       });
   };
 
   const onContinue = async () => {
     setLoading(true);
-    console.log('form add', form);
     try {
       if (photo) {
         const ref = 'photos/' + photo.fileName;
-        console.log('ref', ref);
         const uploadStatus = await uploadPhoto(ref);
         console.log('upload', uploadStatus);
         if (uploadStatus) {
-          setForm('photo', ref);
-          await updateReport();
+          console.log('ref', ref);
+          await updateReport(ref);
           await updateLatest();
+          // setForm('reset');
+          // setPhoto(null);
         } else {
           throw new Error();
         }
       } else {
         await updateReport();
         await updateLatest();
+        setForm('reset');
+        setPhoto(null);
       }
       showMessage({
         message: 'Berhasil memperbarui data',
-        type: 'default',
+        type: 'bottom',
         backgroundColor: 'primary',
         color: 'white',
       });
     } catch (e) {
-      console.log('error add', e);
       showMessage({
         message: `Gagal memperbarui data \n${e}`,
         type: 'default',
@@ -107,6 +120,8 @@ const Add = () => {
           <DropdownField
             label="Alat"
             placeholder="Pilih"
+            defaultValue={form.alat}
+            extraOptions={[{ value: '', label: 'Pilih' }]}
             items={[
               { value: 'AWS', label: 'AWS' },
               { value: 'AWOS', label: 'AWOS' },
@@ -121,7 +136,7 @@ const Add = () => {
             title="Waktu"
             placeholder="(DD/MM/YYYY)"
             value={form.waktu}
-            onChangeDate={value => setForm('waktu', value)}
+            onChangeDate={value => setForm('waktu', value.toISOString())}
           />
           <List
             title="Lokasi"
@@ -147,7 +162,9 @@ const Add = () => {
               { value: 'on', label: 'ON' },
               { value: 'off', label: 'OFF' },
             ]}
+            extraOptions={[{ value: '', label: 'Pilih' }]}
             onChangeValue={value => setForm('kondisi', value)}
+            defaultValue={form.kondisi}
           />
           <View style={styles.catatan}>
             <Text style={{ fontSize: 14, width: 60 }}>Catatan</Text>
@@ -160,7 +177,7 @@ const Add = () => {
               onChangeText={value => setForm('catatan', value)}
             />
           </View>
-          <ImagePicker onChangeValue={value => setPhoto(value)} />
+          <ImagePicker onChangeValue={value => setPhoto(value)} value={photo} />
           <View style={{ marginBottom: 50 }} />
           {loading ? (
             <ActivityIndicator color="primary" />

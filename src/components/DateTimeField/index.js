@@ -11,9 +11,8 @@ const DateTimeField = ({ title, placeholder, value, onChangeDate }) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
-    onChangeDate(currentDate.toISOString());
-    // onChangeDate(moment(currentDate).format('DD/MM/YYYY'));
     setDate(currentDate);
+    onChangeDate(currentDate);
   };
 
   const showMode = currentMode => {
@@ -38,7 +37,7 @@ const DateTimeField = ({ title, placeholder, value, onChangeDate }) => {
         underlineColorAndroid="transparent"
         placeholder={placeholder}
         // value={value}
-        value={moment(date).format('DD/MM/YYYY')}
+        value={value && moment(value).format('DD/MM/YYYY')}
         onPressIn={() => {
           if (mode === 'date') {
             showDatepicker();

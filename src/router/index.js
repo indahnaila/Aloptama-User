@@ -8,6 +8,7 @@ import {
   Add,
   Notif,
   About,
+  Riwayat,
   RiwayatAWS,
   RiwayatAWOS,
   RiwayatAAWS,
@@ -89,6 +90,11 @@ const Router = () => {
       <Stack.Screen
         name="MainApp"
         component={MainApp}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Riwayat"
+        component={Riwayat}
         options={{ headerShown: false }}
       />
       <Stack.Screen

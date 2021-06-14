@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Image, ScrollView, Dimensions } from 'react-native';
 import {
   GambarSuhu,
@@ -10,14 +10,16 @@ import {
   IconSeiscomp3,
 } from '../../assets';
 import { ButtonAlat, Header } from '../../components';
+import AuthContext from '../../router/AuthContext';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
+  const { user } = useContext(AuthContext);
   return (
     <View style={styles.page}>
-      <Header title="Stamet Budiarto" />
+      <Header title={user.displayName ?? user.email} />
       <ScrollView>
         <Image source={GambarSuhu} style={styles.foto} />
         <View style={styles.lolo}>
@@ -25,14 +27,22 @@ const Home = ({ navigation }) => {
             <ButtonAlat
               title="AWS"
               foto={IconAWS}
-              onPress={() => navigation.navigate('RiwayatAWS')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'AWS',
+                })
+              }
             />
           </View>
           <View style={styles.tombol}>
             <ButtonAlat
               title="AWOS"
               foto={IconAWOS}
-              onPress={() => navigation.navigate('RiwayatAWOS')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'AWOS',
+                })
+              }
             />
           </View>
         </View>
@@ -41,14 +51,22 @@ const Home = ({ navigation }) => {
             <ButtonAlat
               title="AAWS"
               foto={IconAAWS}
-              onPress={() => navigation.navigate('RiwayatAAWS')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'AAWS',
+                })
+              }
             />
           </View>
           <View style={styles.tombol}>
             <ButtonAlat
               title="Ceilometer"
               foto={IconCeilo}
-              onPress={() => navigation.navigate('RiwayatCeilo')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'Ceilometer',
+                })
+              }
             />
           </View>
         </View>
@@ -57,14 +75,22 @@ const Home = ({ navigation }) => {
             <ButtonAlat
               title="Radar"
               foto={IconRadar}
-              onPress={() => navigation.navigate('RiwayatRadar')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'Radar',
+                })
+              }
             />
           </View>
           <View style={styles.tombol}>
             <ButtonAlat
               title="Seiscomp3"
               foto={IconSeiscomp3}
-              onPress={() => navigation.navigate('RiwayatSeisc')}
+              onPress={() =>
+                navigation.navigate('Riwayat', {
+                  alat: 'Seiscomp3',
+                })
+              }
             />
           </View>
         </View>

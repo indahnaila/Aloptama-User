@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Pie from 'react-native-pie';
 
-export default () => {
+export default ({ percentage }) => {
   return (
     <View style={styles.container}>
       <View style={{ width: 175, alignItems: 'center' }}>
@@ -11,14 +11,14 @@ export default () => {
           innerRadius={75}
           sections={[
             {
-              percentage: 70,
+              percentage: percentage ?? 0,
               color: '#334752',
             },
           ]}
           backgroundColor="#ddd"
         />
         <View style={styles.gauge}>
-          <Text style={styles.gaugeText}>70%</Text>
+          <Text style={styles.gaugeText}>{`${percentage ?? 0}%`}</Text>
         </View>
       </View>
     </View>

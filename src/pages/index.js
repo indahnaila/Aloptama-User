@@ -4,6 +4,7 @@ import Home from './Home';
 import Add from './Add';
 import Notif from './Notif';
 import About from './About';
+import Riwayat from './Riwayat';
 import RiwayatAAWS from './RiwayatAAWS';
 import RiwayatAWOS from './RiwayatAWOS';
 import RiwayatAWS from './RiwayatAWS';
@@ -19,6 +20,7 @@ export {
   Add,
   Notif,
   About,
+  Riwayat,
   RiwayatAAWS,
   RiwayatSeisc,
   RiwayatRadar,

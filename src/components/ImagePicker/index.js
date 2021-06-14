@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,9 +15,7 @@ import { showMessage } from 'react-native-flash-message';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const ImagePicker = ({ onChangeValue }) => {
-  const [photo, setPhoto] = useState(BlankPhoto);
-
+const ImagePicker = ({ onChangeValue, value }) => {
   const getImage = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -35,8 +33,6 @@ const ImagePicker = ({ onChangeValue }) => {
                 color: 'white',
               });
             } else {
-              const source = { uri: response.uri };
-              setPhoto(source);
               if (onChangeValue) {
                 onChangeValue(response);
               }
@@ -78,8 +74,6 @@ const ImagePicker = ({ onChangeValue }) => {
                 color: 'white',
               });
             } else {
-              const source = { uri: response.uri };
-              setPhoto(source);
               if (onChangeValue) {
                 onChangeValue(response);
               }
@@ -104,12 +98,14 @@ const ImagePicker = ({ onChangeValue }) => {
     }
   };
 
-  // const UploadPhoto = () => {
-  //   Fire.database()
-  //     .ref('aws/' + '/')
-  //     .update({photo: photoForDB});
-  //     navigation.navigate('HasilLaporan', data);
-  // };
+  const _renderPicture = () => {
+    if (value) {
+      return { uri: value.uri };
+    }
+
+    return BlankPhoto;
+  };
+
   return (
     <View>
       <View style={styles.content}>
@@ -120,7 +116,7 @@ const ImagePicker = ({ onChangeValue }) => {
         </Text>
       </View>
       <Image
-        source={photo}
+        source={_renderPicture()}
         style={{
           width: width / 1.44,
           height: height / 5,
