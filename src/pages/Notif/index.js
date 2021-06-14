@@ -75,17 +75,6 @@ const Notif = ({ navigation }) => {
       });
   }, []);
 
-  //   useEffect(() => {
-  //   auth().onAuthStateChanged(user => {
-  //     database()
-  //       .ref(`Laporan/${user.uid}`)
-  //       .on('value', snapshot => {
-  //         // alert(JSON.stringify(parseArray(snapshot.val())[0].data))
-  //         setNilai(parseArray(snapshot.val()));
-  //       });
-  //   });
-  // }, []);
-
   const deleteItem = (item, date) => {
     Alert.alert('Info', 'Anda yakin akan menghapus laporan ini?', [
       {
@@ -122,12 +111,7 @@ const Notif = ({ navigation }) => {
               waktu={item.waktu ?? '-'}
               catatan={item.catatan ?? '-'}
               onDelete={() => deleteItem(item.alat, date)}
-              onPress={() =>
-                navigation.navigate('HasilLaporan', {
-                  alat: item.alat,
-                  date: date,
-                })
-              }
+              onPress={() => navigation.navigate('HasilLaporan', item)}
             />
           );
         });

@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   return (
     <View style={styles.page}>
-      <Header title={user.displayName ?? user.email} />
+      <Header title={user?.displayName ?? user?.email ?? ''} />
       <ScrollView>
         <Image source={GambarSuhu} style={styles.foto} />
         <View style={styles.lolo}>

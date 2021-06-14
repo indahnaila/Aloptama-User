@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,26 +8,22 @@ import {
   Image,
 } from 'react-native';
 import { Header2 } from '../../components';
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const HasilLaporan = ({ navigation, route }) => {
-  const { id } = route.params;
-  const [nilai, setNilai] = React.useState({});
+  const { alat, waktu, kondisi, lokasi, merk, tahun, photo, catatan } =
+    route.params;
 
-  const parseArray = listObject => {
-    const data = [];
-    Object.keys(listObject).map(key => {
-      data.push({
-        id: key,
-        data: listObject[key],
-      });
-    });
-    return data;
-  };
+  const [image, setImage] = useState();
+
+  useEffect(async () => {
+    const storageRef = storage().ref(photo);
+    const url = await storageRef.getDownloadURL();
+    setImage(url);
+  }, []);
 
   return (
     <View style={styles.page}>
@@ -44,43 +40,43 @@ const HasilLaporan = ({ navigation, route }) => {
           <View style={styles.content1}>
             <Text style={styles.text3}>Alat</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.alat}</Text>
+            <Text style={styles.hasil}>{alat}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Waktu</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.waktu}</Text>
+            <Text style={styles.hasil}>{waktu}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Lokasi</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.lokasi}</Text>
+            <Text style={styles.hasil}>{lokasi}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Merk</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.merk}</Text>
+            <Text style={styles.hasil}>{merk}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Tahun</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.tahun}</Text>
+            <Text style={styles.hasil}>{tahun}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Kondisi</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.kondisi}</Text>
+            <Text style={styles.hasil}>{kondisi}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Catatan</Text>
             <Text style={styles.text4}>:</Text>
-            <Text style={styles.hasil}>{nilai.catatan}</Text>
+            <Text style={styles.hasil}>{catatan}</Text>
           </View>
           <View style={styles.content1}>
             <Text style={styles.text3}>Foto</Text>
             <Text style={styles.text4}>:</Text>
             <Image
-              source={{ uri: nilai.photo }}
+              source={{ uri: image }}
               style={{ width: 200, height: 200, marginTop: 7 }}
             />
           </View>

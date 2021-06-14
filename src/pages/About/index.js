@@ -13,7 +13,6 @@ const About = ({ navigation }) => {
   const signOut = () => {
     logout({
       onSuccess: () => {
-        navigation.replace('Login');
         setUser(null);
       },
       onFailure: err => {
