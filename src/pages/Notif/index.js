@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,8 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import { Header, NotifAlat } from '../../components';
-import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import AuthContext from '../../router/AuthContext';
+import moment from 'moment';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -50,31 +51,42 @@ const styles = StyleSheet.create({
   },
 });
 
-const Notif = ({ navigation, onPress }) => {
-  const [nilai, setNilai] = React.useState([]);
-  const parseArray = listObject => {
-    const data = [];
-    Object.keys(listObject).map(key => {
-      data.push({
-        id: key,
-        data: listObject[key],
-      });
-    });
-    return data;
-  };
+const Notif = ({ navigation }) => {
+  const { user } = useContext(AuthContext);
+  const [data, setData] = useState();
 
-  React.useEffect(() => {
-    auth().onAuthStateChanged(user => {
-      database()
-        .ref(`Laporan/${user.uid}`)
-        .on('value', snapshot => {
-          // alert(JSON.stringify(parseArray(snapshot.val())[0].data))
-          setNilai(parseArray(snapshot.val()));
-        });
-    });
+  useEffect(() => {
+    database()
+      .ref(`Laporan/${user.uid}`)
+      .on('value', snapshot => {
+        if (snapshot.val()) {
+          var listItem = [];
+          Object.keys(snapshot.val()).map(alat => {
+            Object.keys(snapshot.val()[alat]).map(date => {
+              listItem.push({
+                ...snapshot.val()[alat][date],
+                id: `${date}-${alat}`,
+              });
+            });
+          });
+          console.log('asd', listItem);
+          setData(listItem);
+        }
+      });
   }, []);
 
-  const deleteItem = (item, itemLap) => {
+  //   useEffect(() => {
+  //   auth().onAuthStateChanged(user => {
+  //     database()
+  //       .ref(`Laporan/${user.uid}`)
+  //       .on('value', snapshot => {
+  //         // alert(JSON.stringify(parseArray(snapshot.val())[0].data))
+  //         setNilai(parseArray(snapshot.val()));
+  //       });
+  //   });
+  // }, []);
+
+  const deleteItem = (item, date) => {
     Alert.alert('Info', 'Anda yakin akan menghapus laporan ini?', [
       {
         text: 'Cancel',
@@ -84,47 +96,50 @@ const Notif = ({ navigation, onPress }) => {
       {
         text: 'OK',
         onPress: () => {
-          auth().onAuthStateChanged(user => {
-            database()
-              .ref(`Laporan/${user.uid}/${item.id}/${itemLap.id}`)
-              .remove();
-          });
+          database()
+            .ref(
+              `Laporan/${user.uid}/${item}/${moment(date).format(
+                'YYYY-MM-DD',
+              )}`,
+            )
+            .remove();
         },
       },
     ]);
   };
 
+  const _renderList = () => {
+    if (data) {
+      return data
+        .sort((a, b) => b - a)
+        .map(item => {
+          const date = moment(item.waktu).format('YYYY-MM-DD');
+          return (
+            <NotifAlat
+              key={item.id}
+              alat={item.alat ?? '-'}
+              kondisi={item.kondisi ?? '-'}
+              waktu={item.waktu ?? '-'}
+              catatan={item.catatan ?? '-'}
+              onDelete={() => deleteItem(item.alat, date)}
+              onPress={() =>
+                navigation.navigate('HasilLaporan', {
+                  alat: item.alat,
+                  date: date,
+                })
+              }
+            />
+          );
+        });
+    }
+
+    return <Text>Belum ada Data</Text>;
+  };
+
   return (
     <View style={styles.page}>
       <Header title="Notifikasi" />
-      <ScrollView>
-        {/* {nilai.map(item => {
-          const data = parseArray(item.data);
-          return (
-            <>
-              <Text style={styles.textjudul}>{item.id}</Text>
-              {data.map(itemLap => {
-                return (
-                  <NotifAlat
-                    key={itemLap.id}
-                    kondisi={itemLap.data.kondisi}
-                    waktu={itemLap.data.waktu}
-                    catatan={itemLap.data.catatan}
-                    onDelete={() => deleteItem(item, itemLap)}
-                    onPress={() =>
-                      navigation.navigate('HasilLaporan', {
-                        id: `${item.id}/${itemLap.id}`,
-                      })
-                    }
-                  />
-                );
-              })}
-            </>
-          );
-        })} */}
-        {/* <NotifAlat onPress={() => navigation.navigate('HasilLaporan')}/>
-        <NotifAlat /> */}
-      </ScrollView>
+      <ScrollView>{_renderList()}</ScrollView>
     </View>
   );
 };

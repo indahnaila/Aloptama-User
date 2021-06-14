@@ -29,17 +29,6 @@ const HasilLaporan = ({ navigation, route }) => {
     return data;
   };
 
-  useEffect(() => {
-    auth().onAuthStateChanged(user => {
-      database()
-        .ref(`Laporan/${user.uid}/${id}`)
-        .on('value', snapshot => {
-          const dataRes = snapshot.val();
-          setNilai(dataRes);
-        });
-    });
-  }, []);
-
   return (
     <View style={styles.page}>
       <Header2

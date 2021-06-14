@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
-import {LogoNamaBMKG} from '../../../assets';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { LogoNamaBMKG } from '../../../assets';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const Header = ({title}) => {
+const Header = ({ title }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{title}</Text>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#334752',
     flexDirection: 'row',
     alignItems: 'center',
-    height: height/10
+    height: height / 10,
   },
   text: {
     textAlign: 'center',

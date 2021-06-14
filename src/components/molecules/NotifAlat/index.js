@@ -17,6 +17,7 @@ const NotifAlat = ({
   onPress,
   kondisi,
   waktu,
+  alat,
   catatan,
   onDelete,
 }) => {
@@ -30,7 +31,7 @@ const NotifAlat = ({
         <View style={{ flex: 1 }}>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.text1}>{kondisi}</Text>
+            <Text style={styles.text1}>{alat}</Text>
             <Text style={{ fontSize: 12, textTransform: 'capitalize' }}>
               {waktu}
             </Text>
