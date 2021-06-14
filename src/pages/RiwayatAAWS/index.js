@@ -1,8 +1,8 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Chart, Header2, ListRiwayat, TabRiwayat} from '../../components';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Chart, Header2, TabRiwayat } from '../../components';
 
-const RiwayatAAWS = ({navigation}) => {
+const RiwayatAAWS = ({ navigation }) => {
   return (
     <View style={styles.page}>
       <Header2 title="AAWS" onPress={() => navigation.goBack()} />
@@ -17,22 +17,22 @@ const RiwayatAAWS = ({navigation}) => {
         <View style={styles.content1}>
           <Text style={styles.text3}>Alat</Text>
           <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>alat</Text>
+          <Text style={{ fontSize: 14 }}>alat</Text>
         </View>
         <View style={styles.content1}>
           <Text style={styles.text3}>Lokasi</Text>
           <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>waktu</Text>
+          <Text style={{ fontSize: 14 }}>waktu</Text>
         </View>
         <View style={styles.content1}>
           <Text style={styles.text3}>Merk</Text>
           <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>lokasi</Text>
+          <Text style={{ fontSize: 14 }}>lokasi</Text>
         </View>
         <View style={styles.content1}>
           <Text style={styles.text3}>Tahun</Text>
           <Text style={styles.text4}>:</Text>
-          <Text style={{fontSize: 14}}>merk</Text>
+          <Text style={{ fontSize: 14 }}>merk</Text>
         </View>
       </ScrollView>
     </View>

@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Pie from 'react-native-pie';
 
 export default () => {
   return (
     <View style={styles.container}>
-      <View style={{width: 175, alignItems: 'center'}}>
+      <View style={{ width: 175, alignItems: 'center' }}>
         <Pie
           radius={80}
           innerRadius={75}
@@ -26,7 +26,7 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
-  container: {alignItems: 'center', justifyContent: 'center', height: 300},
+  container: { alignItems: 'center', justifyContent: 'center', height: 300 },
   gauge: {
     position: 'absolute',
     width: 100,

@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const TabRiwayat = ({text, state}) => {
+const TabRiwayat = ({ text, onPress }) => {
   return (
-    <TouchableOpacity style={styles.conten}>
+    <TouchableOpacity style={styles.conten} onPress={onPress}>
       <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,14 +8,14 @@ import {
   View,
   PermissionsAndroid,
 } from 'react-native';
-import {AddGallery, AddCamera, BlankPhoto} from '../../assets';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {showMessage} from 'react-native-flash-message';
+import { AddGallery, AddCamera, BlankPhoto } from '../../assets';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { showMessage } from 'react-native-flash-message';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const ImagePicker = ({onChangeValue}) => {
+const ImagePicker = ({ onChangeValue }) => {
   const [photo, setPhoto] = useState(BlankPhoto);
 
   const getImage = async () => {
@@ -25,7 +25,7 @@ const ImagePicker = ({onChangeValue}) => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         launchImageLibrary(
-          {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true},
+          { quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true },
           response => {
             if (response.didCancel || response.error) {
               showMessage({
@@ -35,7 +35,7 @@ const ImagePicker = ({onChangeValue}) => {
                 color: 'white',
               });
             } else {
-              const source = {uri: response.uri};
+              const source = { uri: response.uri };
               setPhoto(source);
               if (onChangeValue) {
                 onChangeValue(response);
@@ -68,7 +68,7 @@ const ImagePicker = ({onChangeValue}) => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         launchCamera(
-          {quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true},
+          { quality: 1, maxWidth: 200, maxHeight: 200, includeBase64: true },
           response => {
             if (response.didCancel || response.error) {
               showMessage({
@@ -78,7 +78,7 @@ const ImagePicker = ({onChangeValue}) => {
                 color: 'white',
               });
             } else {
-              const source = {uri: response.uri};
+              const source = { uri: response.uri };
               setPhoto(source);
               if (onChangeValue) {
                 onChangeValue(response);
@@ -114,8 +114,8 @@ const ImagePicker = ({onChangeValue}) => {
     <View>
       <View style={styles.content}>
         <Text style={styles.text}>Foto</Text>
-        <Text style={{fontSize: 16, marginRight: 10}}>:</Text>
-        <Text style={{color: 'gray'}}>
+        <Text style={{ fontSize: 16, marginRight: 10 }}>:</Text>
+        <Text style={{ color: 'gray' }}>
           (upload foto jika terjadi kerusakan)
         </Text>
       </View>
@@ -139,11 +139,11 @@ const ImagePicker = ({onChangeValue}) => {
         }}>
         <TouchableOpacity style={styles.button1} onPress={getPicture}>
           <AddCamera />
-          <Text style={{color: 'white', marginLeft: 5}}>Camera</Text>
+          <Text style={{ color: 'white', marginLeft: 5 }}>Camera</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button1} onPress={getImage}>
           <AddGallery />
-          <Text style={{color: 'white', marginLeft: 5}}>Gallery</Text>
+          <Text style={{ color: 'white', marginLeft: 5 }}>Gallery</Text>
         </TouchableOpacity>
       </View>
     </View>

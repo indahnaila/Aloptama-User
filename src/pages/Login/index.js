@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { LogoBig } from '../../assets';
 import { Button } from '../../components';
-import auth from '@react-native-firebase/auth';
-import { useForm, storeData } from '../../utils';
+import { useForm } from '../../utils';
 import { showMessage } from 'react-native-flash-message';
+import AuthContext from '../../router/AuthContext';
 
 const Login = ({ navigation }) => {
+  const { login } = useContext(AuthContext);
+
   const [form, setForm] = useForm({
     username: '',
     password: '',
@@ -17,46 +19,21 @@ const Login = ({ navigation }) => {
 
   const onContinue = async () => {
     setLoading(true);
-    await auth()
-      .signInWithEmailAndPassword(form.username, form.password)
-      .then(res => {
-        console.log('success:', res);
-        storeData('user', res);
+    await login(form.username, form.password, {
+      onSuccess: res => {
         navigation.replace('MainApp');
-      })
-      .catch(err => {
-        console.log('error:', err);
+      },
+      onFailure: err => {
         showMessage({
           message: err.message,
           type: 'default',
           backgroundColor: 'red',
           color: 'white',
         });
-      });
+      },
+    });
     setLoading(false);
   };
-  // (ini fungsi login akhir)
-
-  //  (ini bagian registrasi dimulai)
-  //   auth()
-  //     .createUserWithEmailAndPassword(form.username, form.password)
-  //     .then(success => {
-  //       setForm('reset');
-  //       const data = {
-  //         username: form.username,
-  //       };
-  //       Fire.database()
-  //         .ref('users/' + success.user.uid + '/')
-  //         .set(data);
-
-  //       storeData('user', data);
-  //       navigation.replace('MainApp', data);
-  //     })
-  //     .catch(error => {
-  //       const errorMessage = error.message;
-  //     });
-  // };
-  // (bagian registrasi berakhir)
 
   return (
     <View style={styles.page}>

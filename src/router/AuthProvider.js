@@ -9,11 +9,18 @@ const AuthProvider = ({ children }) => {
       value={{
         user,
         setUser,
-        login: async (email, password) => {
+        login: async (email, password, { onSuccess, onFailure }) => {
           try {
-            await auth().signInWithEmailAndPassword(email, password);
+            const res = await auth().signInWithEmailAndPassword(
+              email,
+              password,
+            );
+            setUser(res);
+            console.log('login success:', res);
+            onSuccess(res);
           } catch (e) {
             console.log(e);
+            onFailure(e);
           }
         },
         register: async (email, password) => {
@@ -23,10 +30,12 @@ const AuthProvider = ({ children }) => {
             console.log(e);
           }
         },
-        logout: async () => {
+        logout: async ({ onSuccess, onFailure }) => {
           try {
             await auth().signOut();
+            onSuccess();
           } catch (e) {
+            onFailure(e);
             console.error(e);
           }
         },

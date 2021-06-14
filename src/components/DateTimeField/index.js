@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import {StyleSheet, Text, TextInput, View, Platform} from 'react-native';
+import { StyleSheet, Text, TextInput, View, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const DateTimeField = ({title, placeholder, value, onChangeDate}) => {
+const DateTimeField = ({ title, placeholder, value, onChangeDate }) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -11,7 +11,8 @@ const DateTimeField = ({title, placeholder, value, onChangeDate}) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
-    onChangeDate(moment(currentDate).format('DD/MM/YYYY'));
+    onChangeDate(currentDate.toISOString());
+    // onChangeDate(moment(currentDate).format('DD/MM/YYYY'));
     setDate(currentDate);
   };
 
@@ -31,12 +32,13 @@ const DateTimeField = ({title, placeholder, value, onChangeDate}) => {
   return (
     <View style={styles.content}>
       <Text style={styles.text}>{title}</Text>
-      <Text style={{fontSize: 14, marginRight: 10}}>:</Text>
+      <Text style={{ fontSize: 14, marginRight: 10 }}>:</Text>
       <TextInput
         style={styles.input}
         underlineColorAndroid="transparent"
         placeholder={placeholder}
-        value={value}
+        // value={value}
+        value={moment(date).format('DD/MM/YYYY')}
         onPressIn={() => {
           if (mode === 'date') {
             showDatepicker();

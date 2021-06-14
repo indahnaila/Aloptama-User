@@ -1,6 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
-import auth from '@react-native-firebase/auth';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -18,7 +16,6 @@ import {
   RiwayatSeisc,
   HasilLaporan,
 } from '../pages';
-// import {BottomNavigator} from '../components';
 import {
   IconAbout,
   IconAboutAktif,
@@ -29,7 +26,6 @@ import {
   IconNotif,
   IconNotifAktif,
 } from '../assets';
-import AuthContext from './AuthContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,32 +64,6 @@ const MainApp = () => {
 };
 
 const Router = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
-  const [initializing, setInitializing] = useState(true);
-
-  const onAuthStateChanged = userStatus => {
-    setUser(userStatus);
-    if (initializing) {
-      setInitializing(false);
-    }
-    setLoading(false);
-  };
-
-  const initAuth = () => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  };
-
-  useEffect(() => {
-    initAuth();
-  }, []);
-
-  if (loading) {
-    return <ActivityIndicator />;
-  }
-
-  console.log('hjasdjhasd', user);
   return (
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
@@ -106,60 +76,57 @@ const Router = () => {
         component={Login}
         options={{ headerShown: false }}
       />
-      {user && (
-        <>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Add"
-            component={Add}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MainApp"
-            component={MainApp}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatAWS"
-            component={RiwayatAWS}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatAWOS"
-            component={RiwayatAWOS}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatAAWS"
-            component={RiwayatAAWS}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatRadar"
-            component={RiwayatRadar}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatCeilo"
-            component={RiwayatCeilo}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RiwayatSeisc"
-            component={RiwayatSeisc}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="HasilLaporan"
-            component={HasilLaporan}
-            options={{ headerShown: false }}
-          />
-        </>
-      )}
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Add"
+        component={Add}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MainApp"
+        component={MainApp}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatAWS"
+        component={RiwayatAWS}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatAWOS"
+        component={RiwayatAWOS}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatAAWS"
+        component={RiwayatAAWS}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatRadar"
+        component={RiwayatRadar}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatCeilo"
+        component={RiwayatCeilo}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RiwayatSeisc"
+        component={RiwayatSeisc}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HasilLaporan"
+        component={HasilLaporan}
+        options={{ headerShown: false }}
+      />
+      {/* )} */}
     </Stack.Navigator>
   );
 };

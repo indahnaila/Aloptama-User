@@ -1,28 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, Dimensions, Text, View } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import { LogoBig, LogoBMKG } from '../../assets';
 import { Button, Header } from '../../components';
-import auth from '@react-native-firebase/auth';
+import AuthContext from '../../router/AuthContext';
 
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 const About = ({ navigation }) => {
+  const { logout, setUser } = useContext(AuthContext);
+
   const signOut = () => {
-    auth()
-      .signOut()
-      .then(() => {
+    logout({
+      onSuccess: () => {
         navigation.replace('Login');
-      })
-      .catch(err => {
+        setUser(null);
+      },
+      onFailure: err => {
         showMessage({
           message: err.message,
           type: 'default',
           backgroundColor: 'red',
           color: 'white',
         });
-      });
+      },
+    });
   };
   return (
     <View style={styles.page}>

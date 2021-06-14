@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
 import {
@@ -16,7 +16,6 @@ import DropdownField from '../../components/DropdownField';
 import ImagePicker from '../../components/ImagePicker';
 import { showMessage } from 'react-native-flash-message';
 import AuthContext from '../../router/AuthContext';
-import { generateFullDate } from '../../utils';
 
 const Add = () => {
   const { user } = useContext(AuthContext);
@@ -33,11 +32,10 @@ const Add = () => {
     photo: '',
   });
 
-  const handleUpload = async ref => {
+  const uploadPhoto = async ref => {
     try {
       var reference = storage().ref(ref);
       var status = await reference.putFile(photo.uri);
-      console.log('status', status);
       if (status.state === 'success') {
         return true;
       } else {
@@ -48,27 +46,51 @@ const Add = () => {
     }
   };
 
+  const updateReport = async () => {
+    await database().ref(`Laporan/${user.uid}/${form.alat}`).update(form);
+  };
+
+  const updateLatest = async () => {
+    await database()
+      .ref(`Admin/${user.uid}`)
+      .set(form)
+      .update({
+        [form.alat.toUpperCase()]: form.kondisi,
+        Tanggal: new Date.now().toISOString(),
+        Email: user.email,
+      });
+  };
+
   const onContinue = async () => {
     setLoading(true);
-    const ref = 'photos/' + photo.fileName;
-    console.log('ref', ref);
-    const uploadStatus = await handleUpload(ref);
-    console.log('upload', uploadStatus);
-    if (uploadStatus) {
-      const dateTime = generateFullDate();
-      const email = user.email;
-      setForm('photo', ref);
-      database().ref(`Laporan/${user.uid}/${form.alat}`).set(form);
-      database()
-        .ref(`Admin/${user.uid}`)
-        .update({
-          [form.alat.toUpperCase()]: form.kondisi,
-          Tanggal: dateTime,
-          Email: email,
-        });
-    } else {
+    console.log('form add', form);
+    try {
+      if (photo) {
+        const ref = 'photos/' + photo.fileName;
+        console.log('ref', ref);
+        const uploadStatus = await uploadPhoto(ref);
+        console.log('upload', uploadStatus);
+        if (uploadStatus) {
+          setForm('photo', ref);
+          await updateReport();
+          await updateLatest();
+        } else {
+          throw new Error();
+        }
+      } else {
+        await updateReport();
+        await updateLatest();
+      }
       showMessage({
-        message: 'Batal memilih gambar',
+        message: 'Berhasil memperbarui data',
+        type: 'default',
+        backgroundColor: 'primary',
+        color: 'white',
+      });
+    } catch (e) {
+      console.log('error add', e);
+      showMessage({
+        message: `Gagal memperbarui data \n${e}`,
         type: 'default',
         backgroundColor: 'red',
         color: 'white',
@@ -93,18 +115,13 @@ const Add = () => {
               { value: 'Radar', label: 'Radar' },
               { value: 'Seiscomp3', label: 'Seiscomp3' },
             ]}
-            onChangeValue={value => {
-              setForm('alat', value);
-            }}
+            onChangeValue={value => setForm('alat', value)}
           />
           <DateTimePicker
             title="Waktu"
             placeholder="(DD/MM/YYYY)"
             value={form.waktu}
-            onChangeDate={value => {
-              console.log('ajsda', value);
-              setForm('waktu', value);
-            }}
+            onChangeDate={value => setForm('waktu', value)}
           />
           <List
             title="Lokasi"
@@ -130,9 +147,7 @@ const Add = () => {
               { value: 'on', label: 'ON' },
               { value: 'off', label: 'OFF' },
             ]}
-            onChangeValue={value => {
-              setForm('kondisi', value);
-            }}
+            onChangeValue={value => setForm('kondisi', value)}
           />
           <View style={styles.catatan}>
             <Text style={{ fontSize: 14, width: 60 }}>Catatan</Text>
@@ -148,7 +163,7 @@ const Add = () => {
           <ImagePicker onChangeValue={value => setPhoto(value)} />
           <View style={{ marginBottom: 50 }} />
           {loading ? (
-            <ActivityIndicator />
+            <ActivityIndicator color="primary" />
           ) : (
             <Button title="Kirim" type="secondary" onPress={onContinue} />
           )}

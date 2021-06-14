@@ -10,7 +10,7 @@ import RiwayatAWS from './RiwayatAWS';
 import RiwayatRadar from './RiwayatRadar';
 import RiwayatCeilo from './RiwayatCeilo';
 import RiwayatSeisc from './RiwayatSeisc';
-import HasilLaporan from './HasilLaporan'
+import HasilLaporan from './HasilLaporan';
 
 export {
   Splash,
@@ -25,5 +25,5 @@ export {
   RiwayatCeilo,
   RiwayatAWOS,
   RiwayatAWS,
-  HasilLaporan
+  HasilLaporan,
 };

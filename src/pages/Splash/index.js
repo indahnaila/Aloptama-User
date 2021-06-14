@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { LogoBig } from '../../assets';
 import auth from '@react-native-firebase/auth';
+import AuthContext from '../../router/AuthContext';
 
 const Splash = ({ navigation }) => {
+  const { setUser } = useContext(AuthContext);
   useEffect(() => {
     setTimeout(() => {
       auth().onAuthStateChanged(user => {
         if (user) {
+          setUser(user);
           console.log('user:', user);
           navigation.replace('MainApp');
         } else {
