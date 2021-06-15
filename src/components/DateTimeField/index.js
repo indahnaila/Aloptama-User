@@ -9,10 +9,12 @@ const DateTimeField = ({ title, placeholder, value, onChangeDate }) => {
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-    onChangeDate(currentDate);
+    if (selectedDate) {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+      onChangeDate(currentDate);
+    }
   };
 
   const showMode = currentMode => {

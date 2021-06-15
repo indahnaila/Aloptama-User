@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Button, Header, List } from '../../components';
-import { useForm } from '../../utils';
+import { useForm, generateFullDate } from '../../utils';
 import DateTimePicker from '../../components/DateTimeField';
 import DropdownField from '../../components/DropdownField';
 import ImagePicker from '../../components/ImagePicker';
@@ -63,12 +63,11 @@ const Add = () => {
   };
 
   const updateLatest = async () => {
-    const currentDate = new Date();
     await database()
       .ref(`Admin/${user.uid}`)
       .update({
         [form.alat.toUpperCase()]: form.kondisi,
-        Tanggal: currentDate.toISOString(),
+        Tanggal: generateFullDate(),
         Email: user.email,
       });
   };
@@ -84,8 +83,8 @@ const Add = () => {
           console.log('ref', ref);
           await updateReport(ref);
           await updateLatest();
-          // setForm('reset');
-          // setPhoto(null);
+          setForm('reset');
+          setPhoto(null);
         } else {
           throw new Error();
         }
@@ -134,9 +133,13 @@ const Add = () => {
           />
           <DateTimePicker
             title="Waktu"
-            placeholder="(DD/MM/YYYY)"
+            format="YYYY-MM-DD"
+            mode="date"
             value={form.waktu}
-            onChangeDate={value => setForm('waktu', value.toISOString())}
+            onChangeDate={value => {
+              console.log('inia apa', value);
+              setForm('waktu', value);
+            }}
           />
           <List
             title="Lokasi"
