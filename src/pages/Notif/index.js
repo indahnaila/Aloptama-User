@@ -102,16 +102,21 @@ const Notif = ({ navigation }) => {
       return data
         .sort((a, b) => b - a)
         .map(item => {
-          const date = moment(item.waktu).format('YYYY-MM-DD');
+          const date = moment(item.waktu).format('ddd, YYYY-MM-DD HH:mm');
           return (
             <NotifAlat
               key={item.id}
               alat={item.alat ?? '-'}
               kondisi={item.kondisi ?? '-'}
-              waktu={item.waktu ?? '-'}
+              waktu={date}
               catatan={item.catatan ?? '-'}
               onDelete={() => deleteItem(item.alat, date)}
-              onPress={() => navigation.navigate('HasilLaporan', item)}
+              onPress={() => {
+                navigation.navigate('HasilLaporan', {
+                  ...item,
+                  waktu: date,
+                });
+              }}
             />
           );
         });

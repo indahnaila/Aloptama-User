@@ -22,6 +22,7 @@ const Add = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [photo, setPhoto] = useState();
+  const [selectedDate, setSelectedDate] = useState();
   const [form, setForm] = useForm({
     waktu: '',
     merk: '',
@@ -52,7 +53,7 @@ const Add = () => {
     console.log('form add', form);
     await database()
       .ref(
-        `Laporan/${user.uid}/${form.alat}/${moment(form.waktu).format(
+        `Laporan/${user.uid}/${form.alat}/${moment(selectedDate).format(
           'YYYY-MM-DD',
         )}`,
       )
@@ -75,6 +76,9 @@ const Add = () => {
   const onContinue = async () => {
     setLoading(true);
     try {
+      if (!form.waktu) {
+        throw new Error('Waktu harus dipilih');
+      }
       if (photo) {
         const ref = 'photos/' + photo.fileName;
         const uploadStatus = await uploadPhoto(ref);
@@ -136,9 +140,9 @@ const Add = () => {
             format="YYYY-MM-DD"
             mode="date"
             value={form.waktu}
-            onChangeDate={value => {
-              console.log('inia apa', value);
-              setForm('waktu', value);
+            onChangeDate={date => {
+              setForm('waktu', Math.floor(date));
+              setSelectedDate(date);
             }}
           />
           <List
